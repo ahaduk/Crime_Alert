@@ -28,7 +28,7 @@ class SettingPage extends StatelessWidget {
               onPressed: () {
                 Get.to(const LoginScreen());
               },
-              child: const Text("Signup")),
+              child: const Text("Sign up")),
         ],
       ),
     );
