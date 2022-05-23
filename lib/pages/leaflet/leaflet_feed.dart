@@ -2,6 +2,7 @@ import 'package:crime_alert/pages/leaflet/missing.dart';
 import 'package:crime_alert/pages/leaflet/wanted.dart';
 import 'package:flutter/material.dart';
 
+import '../../components/user_profile_avatar.dart';
 import '../../utility/dimensions.dart';
 import '../../widget/big_text.dart';
 import '../../widget/tab_button.dart';
@@ -78,19 +79,7 @@ class _LeafletFeedState extends State<LeafletFeed> {
                   ),
                 ],
               ),
-              Center(
-                child: Container(
-                  width: Dimensions.height40,
-                  height: Dimensions.height40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius30),
-                    color: Colors.black,
-                    image: const DecorationImage(
-                        image: AssetImage("assets/user1.jpg"),
-                        fit: BoxFit.fill),
-                  ),
-                ),
-              )
+              const Center(child: UserProfileAvatar())
             ],
           ),
         ),

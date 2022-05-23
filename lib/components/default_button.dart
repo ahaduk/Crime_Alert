@@ -1,4 +1,4 @@
-import 'package:crime_alert/utility/constants.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/dimensions.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +13,11 @@ class DefaultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: Dimensions.screenWidth * 0.7,
       height: Dimensions.screenHeight / 15,
       child: Ink(
         decoration: BoxDecoration(
-          gradient: Constants.defaultGradient(),
+          gradient: AppColors.defaultGradient(),
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: TextButton(
@@ -25,7 +25,7 @@ class DefaultButton extends StatelessWidget {
           child: Text(
             text!,
             style: TextStyle(
-              fontSize: Dimensions.screenWidth / 18,
+              fontSize: Dimensions.screenWidth / 20,
               color: Colors.white,
             ),
           ),

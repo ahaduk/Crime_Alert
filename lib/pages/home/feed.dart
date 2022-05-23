@@ -23,7 +23,8 @@ class _FeedState extends State<Feed> {
                   shrinkWrap: true,
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return const PostCard(
+                    return PostCard(
+                      id: index.toString(),
                       picUrl: "assets/avatar2.png",
                       //Photo can be null
                       postDescription:

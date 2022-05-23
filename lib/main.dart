@@ -1,12 +1,18 @@
 import 'package:crime_alert/pages/home/home_feed.dart';
 import 'package:crime_alert/pages/leaflet/leaflet_feed.dart';
+import 'package:crime_alert/pages/setting/settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'pages/setting/morepage.dart';
+import 'firebase_options.dart';
 import 'pages/stats/statistics_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -21,21 +27,16 @@ class MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
 
   void _navigatBottomBar(int index) {
-    if (index == 2) {
-      return;
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   final List<Widget> _pages = [
     const HomeFeed(),
     const LeafletFeed(),
-    Container(), //Empty container to balance index number
     const Stats(),
-    const SettingPage(),
+    const SettingsPage(),
   ];
 
   @override
@@ -50,13 +51,16 @@ class MyAppState extends State<MyApp> {
               iconTheme: IconThemeData(color: Colors.black))),
       home: Scaffold(
         body: _pages[_selectedIndex],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.black,
-          child: const Icon(Icons.add, size: 30),
-        ),
+        floatingActionButton: FirebaseAuth.instance.currentUser != null
+            ? FloatingActionButton(
+                onPressed: () {},
+                backgroundColor: Colors.black,
+                child: const Icon(Icons.add, size: 30),
+              )
+            : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
           currentIndex: _selectedIndex,
           onTap: _navigatBottomBar,
           backgroundColor: Colors.white,
@@ -65,12 +69,6 @@ class MyAppState extends State<MyApp> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.notifications), label: 'Leaflet'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.settings,
-                  size: 0,
-                ),
-                label: ''),
             BottomNavigationBarItem(
               icon: Icon(Icons.bar_chart),
               label: 'Statistics',

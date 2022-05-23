@@ -23,9 +23,10 @@ class _MissingState extends State<Missing> {
                   shrinkWrap: true,
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return const PostCard(
+                    return PostCard(
                       // picUrl: "assets/avatar5.png",
                       //Photo can be null
+                      id: index.toString(),
                       postDescription:
                           "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis ipsum dolor sit amet consectetur adipisicing elit. Omnis illum aperiam quam aut nihil ipsa aspernatur porro inventore at expedita?",
                     );

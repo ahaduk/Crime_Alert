@@ -1,3 +1,4 @@
+import 'package:crime_alert/components/user_profile_avatar.dart';
 import 'package:flutter/material.dart';
 
 import '../../utility/dimensions.dart';
@@ -78,19 +79,7 @@ class _HomeFeedState extends State<HomeFeed> {
                   ),
                 ],
               ),
-              Center(
-                child: Container(
-                  width: Dimensions.height40,
-                  height: Dimensions.height40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius30),
-                    color: Colors.black,
-                    image: const DecorationImage(
-                        image: AssetImage("assets/user1.jpg"),
-                        fit: BoxFit.fill),
-                  ),
-                ),
-              )
+              const Center(child: UserProfileAvatar())
             ],
           ),
         ),
