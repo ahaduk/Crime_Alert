@@ -17,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  bool _toggled = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,6 +155,26 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {});
                           },
                         )
+                      : Container(),
+                  FirebaseAuth.instance.currentUser != null
+                      ? SwitchListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          secondary: const Icon(
+                            Icons.alarm,
+                            size: 26,
+                            color: AppColors.iconColor1,
+                          ),
+                          title: BigText(
+                            text: "Keep Me alert",
+                            size: Dimensions.font16,
+                            color: AppColors.textColor,
+                          ),
+                          value: _toggled,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _toggled = value;
+                            });
+                          })
                       : Container(),
                 ])
               ],
