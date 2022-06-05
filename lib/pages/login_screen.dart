@@ -83,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: Dimensions.screenWidth * 0.9,
                             child: Row(
                               children: [
-                                Expanded(flex: 2, child: buildCountryCode()),
                                 Expanded(
                                   flex: 6,
                                   child: buildPhoneNumberField(),
@@ -253,6 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return null;
       },
       decoration: const InputDecoration(
+        prefixText: '+251',
         labelText: "Phone Number",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.phone),
@@ -261,37 +261,11 @@ class _LoginScreenState extends State<LoginScreen> {
           vertical: 10,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(0),
-              bottomLeft: Radius.circular(0),
-              topRight: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: Colors.black),
           gapPadding: 10,
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
-          gapPadding: 10,
-        ),
-      ),
-    );
-  }
-
-  TextFormField buildCountryCode() {
-    return TextFormField(
-      initialValue: "+251",
-      enabled: false,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              topRight: Radius.circular(0),
-              bottomRight: Radius.circular(0)),
           borderSide: BorderSide(color: Colors.black),
           gapPadding: 10,
         ),

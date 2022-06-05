@@ -1,5 +1,6 @@
 import 'package:crime_alert/pages/home/home_feed.dart';
 import 'package:crime_alert/pages/leaflet/leaflet_feed.dart';
+import 'package:crime_alert/pages/post%20alert/post_alert.dart';
 import 'package:crime_alert/pages/setting/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,7 +54,9 @@ class MyAppState extends State<MyApp> {
         body: _pages[_selectedIndex],
         floatingActionButton: FirebaseAuth.instance.currentUser != null
             ? FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => const PostAlertPage());
+                },
                 backgroundColor: Colors.black,
                 child: const Icon(Icons.add, size: 30),
               )

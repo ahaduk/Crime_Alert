@@ -1,4 +1,6 @@
+import 'package:crime_alert/components/upvote_downvote.dart';
 import 'package:crime_alert/pages/post%20description/post_description_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,22 +8,29 @@ import '../utility/dimensions.dart';
 import '../widget/big_text.dart';
 import '../widget/small_text.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final String? picUrl;
   final String postDescription, id;
   const PostCard(
       {Key? key, this.picUrl, required this.postDescription, required this.id})
       : super(key: key);
-  //Also pass a user object or user id to identify profile of poster
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  //Also pass a user object or user id to identify profile of poster
   @override
   Widget build(BuildContext context) {
     double screenHeight = Get.context!.height;
     //double screenWidth = Get.context!.width;
     return GestureDetector(
       onTap: (() {
-        Get.to(() =>
-            PostDescriptionScreen(postDescription: postDescription, id: id));
+        Get.to(() => PostDescriptionScreen(
+            picUrl: widget.picUrl,
+            postDescription: widget.postDescription,
+            id: widget.id));
       }),
       child: Container(
         margin: EdgeInsets.only(
@@ -37,26 +46,16 @@ class PostCard extends StatelessWidget {
         ]),
         child: Row(
           children: [
-            picUrl != null
-                ? Container(
-                    width: Dimensions.listViewImgSize,
-                    height: Dimensions.listViewImgSize,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(Dimensions.radius10),
-                          bottomLeft: Radius.circular(Dimensions.radius10),
-                        ),
-                        color: const Color.fromRGBO(255, 255, 255, 0.384),
-                        image: picUrl != null
-                            ? DecorationImage(
-                                fit: BoxFit.cover, image: AssetImage(picUrl!))
-                            : null),
-                  )
+            widget.picUrl != null
+                ? SizedBox(
+                    width: Dimensions.screenWidth * 0.3,
+                    child: Hero(
+                        tag: widget.id + "photo",
+                        child: Image.asset(widget.picUrl!)))
                 : Container(),
             // text section
             Expanded(
               child: Container(
-                height: Dimensions.listViewImgSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(Dimensions.radius10),
@@ -65,17 +64,16 @@ class PostCard extends StatelessWidget {
                   color: Colors.white,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      top: Dimensions.width10,
-                      left: Dimensions.width10,
-                      right: Dimensions.width10),
+                  padding: FirebaseAuth.instance.currentUser != null
+                      ? EdgeInsets.all(Dimensions.width10)
+                      : const EdgeInsets.all(18),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Hero(
-                        tag: id,
+                        tag: widget.id,
                         child: BigText(
-                          text: postDescription,
+                          text: widget.postDescription,
                           size: screenHeight <= 825 ? 12 : Dimensions.font14,
                         ),
                       ),
@@ -90,21 +88,13 @@ class PostCard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Container(
-                                  width: Dimensions.height20,
-                                  height: Dimensions.height20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radius30),
-                                    color: Colors.black,
-                                    image: const DecorationImage(
-                                        image: AssetImage("assets/user3.jpg"),
-                                        fit: BoxFit.fill),
-                                  ),
+                                const CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage:
+                                      AssetImage("assets/user3.jpg"),
+                                  radius: 10,
                                 ),
-                                SizedBox(
-                                  width: Dimensions.width5,
-                                ),
+                                SizedBox(width: Dimensions.width5),
                                 SmallText(
                                   text: "johonnes milke",
                                   color: const Color.fromARGB(255, 75, 60, 60),
@@ -126,6 +116,8 @@ class PostCard extends StatelessWidget {
                               ),
                             )
                           ]),
+                      //Pass object to upvote down vote to make changes to database
+                      const UpvoteDownvote()
                     ],
                   ),
                 ),
