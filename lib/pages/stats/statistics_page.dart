@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Stats extends StatefulWidget {
@@ -9,38 +13,37 @@ class Stats extends StatefulWidget {
 }
 
 class _StatsState extends State<Stats> {
-  late GoogleMapController _googleMapController;
+  final Completer<GoogleMapController> _googleMapController = Completer();
   bool _locationSelected = false, _isLoading = true;
+  Set<Marker> markers = {};
   late Marker _selectedLocation;
   late Circle _selectedLocationCircle;
+  late Position currentLocation;
   @override
-  void dispose() {
-    if (!_isLoading) _googleMapController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
   }
 
-  void initializeMap(GoogleMapController googleMapController) {
-    _googleMapController = googleMapController;
-    setState(() {
-      _isLoading = false;
-    });
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     const CameraPosition _initialCameraPosition = CameraPosition(
-      target: LatLng(9.001135, 38.807583),
-      zoom: 17,
+      target: LatLng(9.01611042424233, 38.76187135931119),
+      zoom: 12,
     );
     return Scaffold(
       body: GoogleMap(
-        markers: {if (_locationSelected) _selectedLocation},
+        markers: {if (_locationSelected) _selectedLocation, ...markers},
         circles: {if (_locationSelected) _selectedLocationCircle},
-        onLongPress: (pos) {
+        onTap: (pos) {
           setState(() {
             _selectedLocation = Marker(
                 markerId: const MarkerId("Selected"),
-                infoWindow: const InfoWindow(title: "Origin"),
+                infoWindow: const InfoWindow(title: "Report Radius"),
                 position: pos,
                 icon: BitmapDescriptor.defaultMarkerWithHue(
                     BitmapDescriptor.hueOrange));
@@ -56,14 +59,41 @@ class _StatsState extends State<Stats> {
         },
         zoomControlsEnabled: false,
         initialCameraPosition: _initialCameraPosition,
-        onMapCreated: (controller) => initializeMap(controller),
+        onMapCreated: (GoogleMapController controller) {
+          _googleMapController.complete(controller);
+          setState(() {
+            _isLoading = false;
+          });
+        },
       ),
       floatingActionButton: !_isLoading
           ? FloatingActionButton(
-              onPressed: () => _googleMapController.animateCamera(
-                  CameraUpdate.newCameraPosition(_initialCameraPosition)),
-              child: const Icon(Icons.pin_drop_rounded),
-            )
+              child: const Icon(Icons.location_on),
+              heroTag: "navigate to location",
+              onPressed: () async {
+                Position currentLocation;
+                try {
+                  //Getting current location and asking permission
+                  currentLocation = await determinePosition();
+                  final GoogleMapController controller =
+                      await _googleMapController.future;
+                  controller.animateCamera(
+                      CameraUpdate.newCameraPosition(CameraPosition(
+                    target: LatLng(
+                        currentLocation.latitude, currentLocation.longitude),
+                    zoom: 19,
+                  )));
+                  //Adding marker
+                  setState(() {
+                    markers.add(Marker(
+                        markerId: const MarkerId("Current Location"),
+                        position: LatLng(currentLocation.latitude,
+                            currentLocation.longitude)));
+                  });
+                } catch (e) {
+                  showSnackbar("Unable to get location", context);
+                }
+              })
           : null,
     );
   }

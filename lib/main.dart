@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'firebase_options.dart';
 import 'pages/stats/statistics_page.dart';
 
@@ -51,9 +52,14 @@ class MyAppState extends State<MyApp> {
               elevation: 0,
               iconTheme: IconThemeData(color: Colors.black))),
       home: Scaffold(
-        body: _pages[_selectedIndex],
+        //Use Indexed stack to have persisting data
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
         floatingActionButton: FirebaseAuth.instance.currentUser != null
             ? FloatingActionButton(
+                heroTag: null,
                 onPressed: () {
                   Get.to(() => const PostAlertPage());
                 },

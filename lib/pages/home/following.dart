@@ -18,13 +18,14 @@ class _FollowingState extends State<Following> {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return PostCard(
-                      id: index.toString(),
+                      id: index.toString() + "following",
                       picUrl: "assets/avatar5.png",
                       //Photo can be null
                       postDescription:

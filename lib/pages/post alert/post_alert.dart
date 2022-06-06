@@ -4,6 +4,8 @@ import 'package:crime_alert/components/user_profile_avatar.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -18,10 +20,14 @@ class PostAlertPage extends StatefulWidget {
 
 class _PostAlertPageState extends State<PostAlertPage> {
   late Uint8List _file;
-  bool _isLoading = false, _imageSelected = false, _locationSelected = false;
+  bool _isLoading = false,
+      _mapInitialized = false,
+      _imageSelected = false,
+      _locationSelected = false;
   final TextEditingController _descriptionController = TextEditingController();
   late GoogleMapController _googleMapController;
   late Marker _selectedLocation;
+  Set<Marker> markers = {};
   late BitmapDescriptor customMapMarker;
   void setCustomMarker() async {
     customMapMarker = await BitmapDescriptor.fromAssetImage(
@@ -31,11 +37,14 @@ class _PostAlertPageState extends State<PostAlertPage> {
   void initializeMap(GoogleMapController googleMapController) {
     _googleMapController = googleMapController;
     setCustomMarker();
+    _mapInitialized = true;
   }
 
   @override
   void dispose() {
-    _googleMapController.dispose();
+    if (_mapInitialized) {
+      _googleMapController.dispose();
+    }
     _descriptionController.dispose();
     super.dispose();
   }
@@ -109,7 +118,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                             ],
                           )),
                       TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             CameraPosition _initialCameraPosition =
                                 CameraPosition(
                               //Setting default camera position
@@ -118,8 +127,28 @@ class _PostAlertPageState extends State<PostAlertPage> {
                                   : const LatLng(9.001135, 38.807583),
                               zoom: 17,
                             );
-                            _buildLocationSelector(
-                                context, _initialCameraPosition);
+                            try {
+                              //Getting current location and asking permission
+                              Position currentLocation =
+                                  await determinePosition();
+                              _initialCameraPosition = CameraPosition(
+                                target: LatLng(currentLocation.latitude,
+                                    currentLocation.longitude),
+                                zoom: 19,
+                              );
+                              //Adding marker
+                              markers.add(Marker(
+                                  markerId: const MarkerId("Current Location"),
+                                  position: LatLng(currentLocation.latitude,
+                                      currentLocation.longitude)));
+                              buildLocationSelector(
+                                  context, _initialCameraPosition);
+                            } catch (e) {
+                              showSnackbar(
+                                  "You need to enable location to post an alert",
+                                  context);
+                              Get.back();
+                            }
                           },
                           child: Row(
                             children: [
@@ -144,7 +173,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
     );
   }
 
-  Future<dynamic> _buildLocationSelector(
+  Future<dynamic> buildLocationSelector(
       BuildContext context, CameraPosition _initialCameraPosition) {
     return showModalBottomSheet(
         enableDrag: false,
@@ -159,14 +188,18 @@ class _PostAlertPageState extends State<PostAlertPage> {
                 children: [
                   const Expanded(
                     flex: 1,
-                    child: Text("Tap and hold to choose location"),
+                    child: Text("Tap to choose location"),
                   ),
                   Expanded(
                     flex: 8,
                     child: Scaffold(
                       body: GoogleMap(
-                          markers: {if (_locationSelected) _selectedLocation},
-                          onLongPress: (pos) {
+                          mapToolbarEnabled: false,
+                          markers: {
+                            if (_locationSelected) _selectedLocation,
+                            ...markers
+                          },
+                          onTap: (pos) {
                             HapticFeedback.vibrate();
                             setState(() {
                               _selectedLocation = Marker(
@@ -189,6 +222,11 @@ class _PostAlertPageState extends State<PostAlertPage> {
             );
           });
         });
+  }
+
+  Future<dynamic> _buildLocationSelector(
+      BuildContext context, CameraPosition _initialCameraPosition) async {
+    return;
   }
 
   _selectImage(BuildContext context) async {

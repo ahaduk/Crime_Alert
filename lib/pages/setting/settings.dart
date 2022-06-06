@@ -36,6 +36,26 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 //  Settings
                 Column(children: [
+                  FirebaseAuth.instance.currentUser != null
+                      ? SwitchListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          secondary: const Icon(
+                            Icons.alarm,
+                            size: 26,
+                            color: AppColors.iconColor1,
+                          ),
+                          title: BigText(
+                            text: "Keep Me alert",
+                            size: Dimensions.font16,
+                            color: AppColors.textColor,
+                          ),
+                          value: _toggled,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _toggled = value;
+                            });
+                          })
+                      : Container(),
                   ListTile(
                     contentPadding: const EdgeInsets.all(0),
                     leading: const Icon(
@@ -155,26 +175,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {});
                           },
                         )
-                      : Container(),
-                  FirebaseAuth.instance.currentUser != null
-                      ? SwitchListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          secondary: const Icon(
-                            Icons.alarm,
-                            size: 26,
-                            color: AppColors.iconColor1,
-                          ),
-                          title: BigText(
-                            text: "Keep Me alert",
-                            size: Dimensions.font16,
-                            color: AppColors.textColor,
-                          ),
-                          value: _toggled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _toggled = value;
-                            });
-                          })
                       : Container(),
                 ])
               ],
