@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 
 import '../model/post_model.dart';
@@ -10,7 +11,7 @@ class FireStoreMethods {
   // upload post
   Future<String> uploadPost(String description, Uint8List? file, String uid,
       String username, GeoPoint reportLocation) async {
-    String res = "Some Error Occured...";
+    String res = "Some Error Occured";
     try {
       String? photoUrl;
       // to storage
@@ -53,8 +54,7 @@ class FireStoreMethods {
     String res = "Failed to add user";
     _firebaseFirestore
         .collection('users')
-        .doc(uid)
-        .set({'phone': phoneNumber, 'isAgent': false})
+        .add({'phone': phoneNumber, 'isAgent': false})
         .then((value) => "User Added")
         .catchError((error) => "Failed to add user: $error");
     return res;
