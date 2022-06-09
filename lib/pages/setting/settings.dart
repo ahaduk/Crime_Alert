@@ -1,8 +1,10 @@
 import 'package:crime_alert/components/no_account_text.dart';
+import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../components/user_profile_card.dart';
 import '../../utility/colors.dart';
@@ -99,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ListTile(
                     contentPadding: const EdgeInsets.all(0),
                     leading: const Icon(
-                      Icons.notifications_active_outlined,
+                      Icons.warning_rounded,
                       size: 26,
                       color: AppColors.iconColor1,
                     ),
@@ -109,11 +111,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       color: AppColors.iconColor2,
                     ),
                     title: BigText(
-                      text: "Emergency",
+                      text: "Emergency Contacts",
                       size: Dimensions.font16,
                       color: AppColors.textColor,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const EmergencyPage());
+                    },
                   ),
                   // Privacy
                   ListTile(

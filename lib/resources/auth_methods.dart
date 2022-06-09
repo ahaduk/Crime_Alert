@@ -1,3 +1,4 @@
+import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthMethods {
@@ -24,6 +25,11 @@ class AuthMethods {
     try {
       await _auth.signInWithCredential(credential);
       res = "Successfully signed in";
+      if (!FireStoreMethods().checkIfUserExists(_auth.currentUser!.uid)) {
+        //If user does not exist initialize data
+        FireStoreMethods().initializeUserData(
+            _auth.currentUser!.uid, _auth.currentUser!.phoneNumber!);
+      }
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-verification-code') {
         res = 'The entered code is invalid';

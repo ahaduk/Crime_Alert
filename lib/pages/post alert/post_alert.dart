@@ -1,9 +1,11 @@
 import 'dart:typed_data';
-
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/user_profile_avatar.dart';
+import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,14 +21,13 @@ class PostAlertPage extends StatefulWidget {
 }
 
 class _PostAlertPageState extends State<PostAlertPage> {
-  late Uint8List _file;
-  bool _isLoading = false,
-      _mapInitialized = false,
-      _imageSelected = false,
-      _locationSelected = false;
+  Uint8List? _file;
+  bool _isLoading = false, _imageSelected = false, _locationSelected = false;
   final TextEditingController _descriptionController = TextEditingController();
-  late GoogleMapController _googleMapController;
+  final Completer<GoogleMapController> _googleMapController = Completer();
+  late Position _currentposition;
   late Marker _selectedLocation;
+  late double _distanceInMeters;
   Set<Marker> markers = {};
   late BitmapDescriptor customMapMarker;
   void setCustomMarker() async {
@@ -34,17 +35,8 @@ class _PostAlertPageState extends State<PostAlertPage> {
         const ImageConfiguration(), "assets/siren.png");
   }
 
-  void initializeMap(GoogleMapController googleMapController) {
-    _googleMapController = googleMapController;
-    setCustomMarker();
-    _mapInitialized = true;
-  }
-
   @override
   void dispose() {
-    if (_mapInitialized) {
-      _googleMapController.dispose();
-    }
     _descriptionController.dispose();
     super.dispose();
   }
@@ -58,15 +50,42 @@ class _PostAlertPageState extends State<PostAlertPage> {
         actions: [
           TextButton(
               onPressed: () async {
-                //Validate and upload
+                //Validate
+                if (!_locationSelected) {
+                  showSnackbar(
+                      "Please select a location for the alert", context);
+                  return;
+                }
+                if (_descriptionController.text == "") {
+                  showSnackbar("Descripton can not be empty", context);
+                  return;
+                }
+                if (_distanceInMeters > 2000) {
+                  showSnackbar(
+                      "Report location can not be greater than 2KM from your current location.",
+                      context);
+                  return;
+                }
                 setState(() {
                   _isLoading = true;
                 });
-                await Future.delayed(const Duration(seconds: 3));
+                //Uploading
+                String res = await FireStoreMethods().uploadPost(
+                    _descriptionController.text,
+                    _file,
+                    FirebaseAuth.instance.currentUser!.uid,
+                    "Test data",
+                    GeoPoint(_selectedLocation.position.latitude,
+                        _selectedLocation.position.longitude));
                 setState(() {
                   _isLoading = false;
                 });
-                showSnackbar("Successfully Uploaded Alert!", context);
+                if (res == "success") {
+                  showSnackbar("Successfully posted alert!", context);
+                  Get.back();
+                } else {
+                  showSnackbar("Failed to upload alert", context);
+                }
               },
               child: const Text("Post"))
         ],
@@ -136,6 +155,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                                     currentLocation.longitude),
                                 zoom: 19,
                               );
+                              _currentposition = currentLocation;
                               //Adding marker
                               markers.add(Marker(
                                   markerId: const MarkerId("Current Location"),
@@ -144,18 +164,30 @@ class _PostAlertPageState extends State<PostAlertPage> {
                               buildLocationSelector(
                                   context, _initialCameraPosition);
                             } catch (e) {
-                              showSnackbar(
-                                  "You need to enable location to post an alert",
-                                  context);
+                              showSnackbar(e.toString(), context);
                               Get.back();
                             }
                           },
-                          child: Row(
+                          child: Column(
                             children: [
+                              Row(
+                                children: [
+                                  _locationSelected
+                                      ? const Text("Change Location")
+                                      : const Text("Choose Location"),
+                                  const Icon(Icons.map)
+                                ],
+                              ),
                               _locationSelected
-                                  ? const Text("Change Location")
-                                  : const Text("Choose Location"),
-                              const Icon(Icons.map)
+                                  ? Text(
+                                      _distanceInMeters.toStringAsFixed(3) +
+                                          " Meters away",
+                                      style: TextStyle(
+                                          color: _distanceInMeters > 2000
+                                              ? Colors.red
+                                              : Colors.blue),
+                                    )
+                                  : Container()
                             ],
                           )),
                     ],
@@ -164,7 +196,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                       ? SizedBox(
                           height: MediaQuery.of(context).size.width * 1,
                           width: MediaQuery.of(context).size.width * 1,
-                          child: Image.memory(_file),
+                          child: Image.memory(_file!),
                         )
                       : Container(),
                 ],
@@ -194,27 +226,42 @@ class _PostAlertPageState extends State<PostAlertPage> {
                     flex: 8,
                     child: Scaffold(
                       body: GoogleMap(
-                          mapToolbarEnabled: false,
-                          markers: {
-                            if (_locationSelected) _selectedLocation,
-                            ...markers
-                          },
-                          onTap: (pos) {
-                            HapticFeedback.vibrate();
-                            setState(() {
-                              _selectedLocation = Marker(
-                                  markerId: const MarkerId("reportLocation"),
-                                  position: pos,
-                                  icon: customMapMarker);
-                              _locationSelected = true;
-                            });
-                            setStateModal(
-                                () {}); //Setstate for modal to refresh selected location
-                          },
-                          zoomControlsEnabled: false,
-                          initialCameraPosition: _initialCameraPosition,
-                          onMapCreated: (controller) =>
-                              initializeMap(controller)),
+                        mapToolbarEnabled: false,
+                        markers: {
+                          if (_locationSelected) _selectedLocation,
+                          ...markers
+                        },
+                        onTap: (pos) {
+                          _selectedLocation = Marker(
+                              markerId: const MarkerId("reportLocation"),
+                              position: pos,
+                              icon: customMapMarker);
+                          _distanceInMeters = calculateDistance(
+                              _currentposition.latitude,
+                              _currentposition.longitude,
+                              pos.latitude,
+                              pos.longitude);
+                          setState(() {
+                            _locationSelected = true;
+                            _distanceInMeters *= 1000;
+                          });
+                          setStateModal(
+                              () {}); //Setstate for modal to refresh selected location
+                          if (_distanceInMeters > 2000) {
+                            showSnackbar(
+                                "Report location can not be greater than 2KM from your current location.",
+                                context);
+                          }
+                        },
+                        zoomControlsEnabled: false,
+                        initialCameraPosition: _initialCameraPosition,
+                        onMapCreated: (GoogleMapController controller) {
+                          setCustomMarker();
+                          if (!_googleMapController.isCompleted) {
+                            _googleMapController.complete(controller);
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -222,11 +269,6 @@ class _PostAlertPageState extends State<PostAlertPage> {
             );
           });
         });
-  }
-
-  Future<dynamic> _buildLocationSelector(
-      BuildContext context, CameraPosition _initialCameraPosition) async {
-    return;
   }
 
   _selectImage(BuildContext context) async {
