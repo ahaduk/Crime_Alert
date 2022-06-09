@@ -10,7 +10,7 @@ class FireStoreMethods {
   // upload post
   Future<String> uploadPost(String description, Uint8List? file, String uid,
       String username, GeoPoint reportLocation) async {
-    String res = "Some Error Occured";
+    String res = "Some Error Occured...";
     try {
       String? photoUrl;
       // to storage
