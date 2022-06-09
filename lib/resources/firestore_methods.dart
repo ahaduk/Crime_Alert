@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 
 import '../model/post_model.dart';
@@ -54,7 +53,8 @@ class FireStoreMethods {
     String res = "Failed to add user";
     _firebaseFirestore
         .collection('users')
-        .add({'phone': phoneNumber, 'isAgent': false})
+        .doc(uid)
+        .set({'phone': phoneNumber, 'isAgent': false})
         .then((value) => "User Added")
         .catchError((error) => "Failed to add user: $error");
     return res;
