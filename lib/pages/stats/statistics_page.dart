@@ -19,15 +19,6 @@ class _StatsState extends State<Stats> {
   late Marker _selectedLocation;
   late Circle _selectedLocationCircle;
   late Position currentLocation;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +82,7 @@ class _StatsState extends State<Stats> {
                             currentLocation.longitude)));
                   });
                 } catch (e) {
-                  showSnackbar("Unable to get location", context);
+                  showSnackbar(e.toString(), context);
                 }
               })
           : null,
