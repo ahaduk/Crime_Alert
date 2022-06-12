@@ -22,7 +22,10 @@ class PostAlertPage extends StatefulWidget {
 
 class _PostAlertPageState extends State<PostAlertPage> {
   Uint8List? _file;
-  bool _isLoading = false, _imageSelected = false, _locationSelected = false;
+  bool _isLoading = false,
+      _imageSelected = false,
+      _userlocationFetched = false,
+      _locationSelected = false;
   final TextEditingController _descriptionController = TextEditingController();
   final Completer<GoogleMapController> _googleMapController = Completer();
   late Position _currentposition;
@@ -147,20 +150,26 @@ class _PostAlertPageState extends State<PostAlertPage> {
                               zoom: 17,
                             );
                             try {
-                              //Getting current location and asking permission
-                              Position currentLocation =
-                                  await determinePosition();
-                              _initialCameraPosition = CameraPosition(
-                                target: LatLng(currentLocation.latitude,
-                                    currentLocation.longitude),
-                                zoom: 19,
-                              );
-                              _currentposition = currentLocation;
+                              //Getting current location and asking permission if user location not set
+                              if (!_userlocationFetched) {
+                                _userlocationFetched = true;
+                                Position currentLocation =
+                                    await determinePosition();
+                                _currentposition = currentLocation;
+                              }
+                              _initialCameraPosition = _locationSelected
+                                  ? CameraPosition(
+                                      target: LatLng(
+                                          _selectedLocation.position.latitude,
+                                          _selectedLocation.position.longitude),
+                                      zoom: 19,
+                                    )
+                                  : CameraPosition(
+                                      target: LatLng(_currentposition.latitude,
+                                          _currentposition.longitude),
+                                      zoom: 19,
+                                    );
                               //Adding marker
-                              markers.add(Marker(
-                                  markerId: const MarkerId("Current Location"),
-                                  position: LatLng(currentLocation.latitude,
-                                      currentLocation.longitude)));
                               buildLocationSelector(
                                   context, _initialCameraPosition);
                             } catch (e) {
@@ -226,10 +235,11 @@ class _PostAlertPageState extends State<PostAlertPage> {
                     flex: 8,
                     child: Scaffold(
                       body: GoogleMap(
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
                         mapToolbarEnabled: false,
                         markers: {
                           if (_locationSelected) _selectedLocation,
-                          ...markers
                         },
                         onTap: (pos) {
                           _selectedLocation = Marker(

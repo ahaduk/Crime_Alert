@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/postcard.dart';
 import 'package:flutter/material.dart';
 
@@ -17,22 +18,39 @@ class _FollowingState extends State<Following> {
         Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return PostCard(
-                      id: index.toString() + "following",
-                      picUrl: "assets/avatar5.png",
-                      //Photo can be null
-                      postDescription:
-                          "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis ipsum dolor sit amet consectetur adipisicing elit. Omnis illum aperiam quam aut nihil ipsa aspernatur porro inventore at expedita?",
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('posts')
+                    .orderBy('datePublished', descending: true)
+                    .snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                ),
+                  }
+                  if (snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No Feeds Available\nStart following someone to see posts",
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return PostCard(
+                          snap: snapshot.data!.docs[index].data(),
+                          docId:
+                              snapshot.data!.docs[index].reference.id + "fo");
+                    },
+                  );
+                },
               ),
             )
           ],

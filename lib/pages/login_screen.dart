@@ -98,8 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(height: Dimensions.screenHeight / 45),
                           DefaultButton(
                               press: () {
-                                if (_formKey.currentState!.validate()) {
-                                  //_formKey.currentState!.save();
+                                if (_formKey.currentState!.validate() &&
+                                    _phoneController.text.length == 9) {
+                                  // _formKey.currentState!.save();
                                   showDialog(
                                       context: context,
                                       builder: (context) =>
@@ -219,6 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextFormField buildPhoneNumberField() {
     return TextFormField(
+      maxLength: 9,
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       onSaved: (newValue) => phoneNumber = newValue!,

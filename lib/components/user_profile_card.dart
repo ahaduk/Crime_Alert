@@ -19,7 +19,7 @@ class UserProfileCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BigText(
-              text: "Johannes miliks",
+              text: "John Milkis",
               size: Dimensions.font26,
               color: AppColors.textColor,
               overflow: TextOverflow.fade,

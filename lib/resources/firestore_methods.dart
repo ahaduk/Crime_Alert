@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
+import 'package:crime_alert/utility/utils.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../model/post_model.dart';
 
@@ -58,5 +60,63 @@ class FireStoreMethods {
         .then((value) => "User Added")
         .catchError((error) => "Failed to add user: $error");
     return res;
+  }
+
+  Future<String?> upvote(String postId, String uid, List? upvotes) async {
+    try {
+      if (upvotes != null && upvotes.contains(uid)) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'upvotes': FieldValue.arrayRemove([uid]),
+        });
+      } else if (upvotes != null && !upvotes.contains(uid)) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'upvotes': FieldValue.arrayUnion([uid]),
+          'downvotes': FieldValue.arrayRemove([uid]),
+        });
+      } else if (upvotes == null) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'upvotes': FieldValue.arrayUnion([uid]),
+          'downvotes': [],
+        });
+      }
+    } catch (e) {
+      return e.toString();
+    }
+    return null;
+  }
+
+  Future<String?> downvote(String postId, String uid, List? downvotes) async {
+    try {
+      if (downvotes != null && downvotes.contains(uid)) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'downvotes': FieldValue.arrayRemove([uid]),
+        });
+      } else if (downvotes != null && !downvotes.contains(uid)) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'upvotes': FieldValue.arrayRemove([uid]),
+          'downvotes': FieldValue.arrayUnion([uid]),
+        });
+      } else if (downvotes == null) {
+        await _firebaseFirestore.collection('posts').doc(postId).update({
+          'upvotes': [],
+          'downvotes': FieldValue.arrayUnion([uid]),
+        });
+      }
+    } catch (e) {
+      return e.toString();
+    }
+    return null;
+  }
+
+  Future<void> deletePost(
+      String postId, String postUrl, BuildContext context) async {
+    try {
+      // Remove from storage
+      // await FirebaseStorage.instance.refFromURL(postUrl).delete();
+      await _firebaseFirestore.collection('posts').doc(postId).delete();
+      showSnackbar("Successfully deleted post", context);
+    } catch (err) {
+      showSnackbar("Failed to delete post", context);
+    }
   }
 }

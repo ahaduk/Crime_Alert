@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FlutterUser {
   final String firstName;
   final String middleName;
@@ -5,7 +7,6 @@ class FlutterUser {
   final String uid;
   final String photoUrl;
   final String phoneNumber;
-  final int age;
   final int trustPoint;
   final String bio;
   final List followers;
@@ -17,7 +18,6 @@ class FlutterUser {
       required this.phoneNumber,
       required this.uid,
       required this.photoUrl,
-      required this.age,
       required this.trustPoint,
       required this.bio,
       required this.followers,
@@ -29,21 +29,23 @@ class FlutterUser {
         "phoneNumber": phoneNumber,
         "uid": uid,
         "photoUrl": photoUrl,
-        "age": age,
         "trustPoint": trustPoint,
         "bio": bio,
         "followers": followers,
         "following": following
       };
-  //     static FlutterUser fromSnap(DocumentSnapshot snap) {
-  //   var snapShot = snap.data() as Map<String, dynamic>;
-  //   return FlutterUser(
-  //       email: snapShot['username'],
-  //       uid: snapShot['uid'],
-  //       photoUrl: snapShot['photoUrl'],
-  //       username: snapShot['username'],
-  //       bio: snapShot['bio'],
-  //       followers: snapShot['followers'],
-  //       following: snapShot['following']);
-  // }
+  static FlutterUser fromSnap(DocumentSnapshot snap) {
+    var snapShot = snap.data() as Map<String, dynamic>;
+    return FlutterUser(
+        uid: snapShot['uid'],
+        photoUrl: snapShot['photoUrl'],
+        bio: snapShot['bio'],
+        followers: snapShot['followers'],
+        following: snapShot['following'],
+        firstName: snapShot['firstName'],
+        middleName: snapShot['middlename'],
+        lastName: snapShot['lastname'],
+        phoneNumber: snapShot['phoneNumber'],
+        trustPoint: snapShot['trustPoint']);
+  }
 }
