@@ -1,4 +1,5 @@
 import 'package:crime_alert/components/no_account_text.dart';
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
@@ -20,13 +21,29 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _toggled = false;
+  FlutterUser? _fuser;
+
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      getUser();
+    }
+  }
+
+  Future<void> getUser() async {
+    FlutterUser fuser = await AuthMethods().getUserDetails();
+    setState(() {
+      _fuser = fuser;
+      _toggled = _fuser!.keepMeAlert;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {});
-        },
+        onRefresh: getUser,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
@@ -35,8 +52,11 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 children: [
                   // User Profile
-                  FirebaseAuth.instance.currentUser != null
-                      ? const UserProfileCard(ownProfile: true)
+                  FirebaseAuth.instance.currentUser != null && _fuser != null
+                      ? UserProfileCard(
+                          ownProfile: true,
+                          fuser: _fuser!,
+                        )
                       : const NoAccountText(),
                   SizedBox(
                     height: Dimensions.height20,

@@ -1,33 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FlutterUser {
-  final String firstName;
-  final String middleName;
-  final String lastName;
+  final String? fullName;
   final String uid;
-  final String photoUrl;
+  final bool isAgent;
+  final bool keepMeAlert;
+  final String? photoUrl;
   final String phoneNumber;
-  final int trustPoint;
-  final String bio;
-  final List followers;
-  final List following;
+  final int? trustPoint;
+  final String? bio;
+  final List? followers;
+  final List? following;
   const FlutterUser(
-      {required this.firstName,
-      required this.middleName,
-      required this.lastName,
+      {this.fullName,
       required this.phoneNumber,
       required this.uid,
-      required this.photoUrl,
-      required this.trustPoint,
-      required this.bio,
-      required this.followers,
-      required this.following});
+      required this.isAgent,
+      required this.keepMeAlert,
+      this.photoUrl,
+      this.trustPoint,
+      this.bio,
+      this.followers,
+      this.following});
   Map<String, dynamic> toJson() => {
-        "firstName": firstName,
-        "middleName": middleName,
-        "lastName": lastName,
+        "fullName": fullName,
         "phoneNumber": phoneNumber,
         "uid": uid,
+        "isAgent": isAgent,
+        "keepMeAlert": keepMeAlert,
         "photoUrl": photoUrl,
         "trustPoint": trustPoint,
         "bio": bio,
@@ -38,13 +38,13 @@ class FlutterUser {
     var snapShot = snap.data() as Map<String, dynamic>;
     return FlutterUser(
         uid: snapShot['uid'],
+        isAgent: snapShot['isAgent'],
+        keepMeAlert: snapShot['keepMeAlert'],
         photoUrl: snapShot['photoUrl'],
         bio: snapShot['bio'],
         followers: snapShot['followers'],
         following: snapShot['following'],
-        firstName: snapShot['firstName'],
-        middleName: snapShot['middlename'],
-        lastName: snapShot['lastname'],
+        fullName: snapShot['fullName'],
         phoneNumber: snapShot['phoneNumber'],
         trustPoint: snapShot['trustPoint']);
   }

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,10 +54,16 @@ class FireStoreMethods {
 
   String initializeUserData(String uid, String phoneNumber) {
     String res = "Failed to add user";
+    FlutterUser userToInitialize = FlutterUser(
+      uid: uid,
+      phoneNumber: phoneNumber,
+      isAgent: false,
+      keepMeAlert: false,
+    );
     _firebaseFirestore
         .collection('users')
         .doc(uid)
-        .set({'phone': phoneNumber, 'isAgent': false})
+        .set(userToInitialize.toJson())
         .then((value) => "User Added")
         .catchError((error) => "Failed to add user: $error");
     return res;

@@ -1,7 +1,9 @@
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/home/home_feed.dart';
 import 'package:crime_alert/pages/leaflet/leaflet_feed.dart';
 import 'package:crime_alert/pages/post%20alert/post_alert.dart';
 import 'package:crime_alert/pages/setting/settings.dart';
+import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
+  FlutterUser? _fuser;
 
   void _navigatBottomBar(int index) {
     setState(() {
@@ -40,6 +43,20 @@ class MyAppState extends State<MyApp> {
     const Stats(),
     const SettingsPage(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      getUser();
+    }
+  }
+
+  void getUser() async {
+    FlutterUser fuser = await AuthMethods().getUserDetails();
+    setState(() {
+      _fuser = fuser;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +74,9 @@ class MyAppState extends State<MyApp> {
           index: _selectedIndex,
           children: _pages,
         ),
-        floatingActionButton: FirebaseAuth.instance.currentUser != null
+        floatingActionButton: FirebaseAuth.instance.currentUser != null &&
+                _fuser != null &&
+                _fuser!.isAgent
             ? FloatingActionButton(
                 heroTag: null,
                 onPressed: () {

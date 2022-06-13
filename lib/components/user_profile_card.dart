@@ -1,3 +1,4 @@
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +7,21 @@ import '../utility/dimensions.dart';
 import '../widget/big_text.dart';
 import '../widget/small_text.dart';
 
-class UserProfileCard extends StatelessWidget {
+class UserProfileCard extends StatefulWidget {
   final bool ownProfile;
-  const UserProfileCard({Key? key, required this.ownProfile}) : super(key: key);
+  final FlutterUser fuser;
+  const UserProfileCard(
+      {Key? key, required this.ownProfile, required this.fuser})
+      : super(key: key);
 
   @override
+  State<UserProfileCard> createState() => _UserProfileCardState();
+}
+
+class _UserProfileCardState extends State<UserProfileCard> {
+  @override
   Widget build(BuildContext context) {
+    final FlutterUser _fuser = widget.fuser;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,19 +29,21 @@ class UserProfileCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BigText(
-              text: "John Milkis",
+              text: _fuser.fullName != null ? _fuser.fullName! : "Civilian",
               size: Dimensions.font26,
               color: AppColors.textColor,
               overflow: TextOverflow.fade,
             ),
-            const CircleAvatar(
+            CircleAvatar(
               backgroundColor: Colors.grey,
-              backgroundImage: AssetImage("assets/user1.jpg"),
+              backgroundImage: _fuser.photoUrl != null
+                  ? AssetImage(_fuser.photoUrl!)
+                  : const AssetImage("assets/profile.png"),
               radius: 50,
             ),
           ],
         ),
-        ownProfile
+        widget.ownProfile
             ? Row(
                 children: [
                   const Text("Phone Number: "),
@@ -47,15 +59,17 @@ class UserProfileCard extends StatelessWidget {
         SizedBox(
           height: Dimensions.height15,
         ),
-        Container(
-          padding: EdgeInsets.only(left: Dimensions.width10),
-          child: SmallText(
-            text:
-                "Lorem,  dolor sit sit amet consecteturdolor sit sit amet consectetur",
-            size: Dimensions.font16,
-            color: AppColors.paraColor,
-          ),
-        ),
+        _fuser.isAgent
+            ? Container(
+                padding: EdgeInsets.only(left: Dimensions.width10),
+                child: SmallText(
+                  text: _fuser.bio != null ? _fuser.bio! : "Tap to add bio",
+                  size: Dimensions.font16,
+                  color: AppColors.paraColor,
+                ),
+              )
+            : Container(),
+
         const SizedBox(height: 10),
         // Post, follower, follwing
         Container(
@@ -87,7 +101,7 @@ class UserProfileCard extends StatelessWidget {
                     ),
                   ),
                   SmallText(
-                    text: "Posts",
+                    text: "Trust Points",
                     size: Dimensions.font15,
                     color: AppColors.paraColor,
                   ),
