@@ -34,7 +34,8 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     DateTime dateTimeOfPost =
         (widget.snap['datePublished'] as Timestamp).toDate();
-    GeoPoint reportLocation = (widget.snap['reportLocation'] as GeoPoint);
+    GeoPoint reportLocation =
+        (widget.snap['reportLocation']['geopoint'] as GeoPoint);
     double distance = 0;
     widget.currentLocation != null
         ? distance = calculateDistance(

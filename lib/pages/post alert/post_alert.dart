@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/user_profile_avatar.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
@@ -10,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 import '../../utility/dimensions.dart';
 
@@ -28,6 +28,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
       _locationSelected = false;
   final TextEditingController _descriptionController = TextEditingController();
   final Completer<GoogleMapController> _googleMapController = Completer();
+  final geo = Geoflutterfire();
   late Position _currentposition;
   late Marker _selectedLocation;
   late double _distanceInMeters;
@@ -78,8 +79,9 @@ class _PostAlertPageState extends State<PostAlertPage> {
                     _file,
                     FirebaseAuth.instance.currentUser!.uid,
                     "Test data",
-                    GeoPoint(_selectedLocation.position.latitude,
-                        _selectedLocation.position.longitude));
+                    geo.point(
+                        latitude: _selectedLocation.position.latitude,
+                        longitude: _selectedLocation.position.longitude));
                 setState(() {
                   _isLoading = false;
                 });

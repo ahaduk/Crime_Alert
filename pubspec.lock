@@ -219,6 +219,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "10.1.0"
+  geoflutterfire:
+    dependency: "direct main"
+    description:
+      name: geoflutterfire
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.3"
   geolocator:
     dependency: "direct main"
     description:
@@ -373,13 +380,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -394,13 +394,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  provider:
-    dependency: "direct main"
+  rxdart:
+    dependency: transitive
     description:
-      name: provider
+      name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.3"
+    version: "0.27.4"
   sky_engine:
     dependency: transitive
     description: flutter

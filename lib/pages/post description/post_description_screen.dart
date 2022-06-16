@@ -131,8 +131,8 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                 children: [
                   TextButton(
                       onPressed: () {
-                        GeoPoint reportLocation =
-                            (widget.snap['reportLocation'] as GeoPoint);
+                        GeoPoint reportLocation = (widget.snap['reportLocation']
+                            ['geopoint'] as GeoPoint);
                         _reportLocation = Marker(
                             position: LatLng(reportLocation.latitude,
                                 reportLocation.longitude),

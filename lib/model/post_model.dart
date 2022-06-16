@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class Post {
   final String description;
   final String uid;
   final DateTime datePublished;
   final String? imgUrl;
-  final GeoPoint reportLocation;
+  final GeoFirePoint reportLocation;
   const Post(
       {required this.description,
       required this.uid,
@@ -17,7 +18,7 @@ class Post {
         "uid": uid,
         "datePublished": datePublished,
         "imgUrl": imgUrl,
-        "reportLocation": reportLocation
+        "reportLocation": reportLocation.data
       };
   static Post fromSnap(DocumentSnapshot snap) {
     var snapShot = snap.data() as Map<String, dynamic>;

@@ -5,6 +5,7 @@ import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 import '../model/post_model.dart';
 
@@ -12,7 +13,7 @@ class FireStoreMethods {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   // upload post
   Future<String> uploadPost(String description, Uint8List? file, String uid,
-      String username, GeoPoint reportLocation) async {
+      String username, GeoFirePoint reportLocation) async {
     String res = "Some Error Occured";
     try {
       String? photoUrl;
