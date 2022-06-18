@@ -57,12 +57,17 @@ class _FeedState extends State<Feed> {
           longitude: _currentLocation.longitude);
 
 // get the collection reference or query
-      var collectionReference = FirebaseFirestore.instance.collection('posts');
+      var collectionReference =
+          FirebaseFirestore.instance.collection('posts').limit(10);
       // .orderBy('datePublished', descending: true);
 
       Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream = geo
           .collection(collectionRef: collectionReference)
-          .within(center: center, radius: 2, field: 'reportLocation');
+          .within(
+              center: center,
+              radius: 2,
+              field: 'reportLocation',
+              strictMode: true);
       return Stack(children: [
         Column(
           children: [

@@ -155,7 +155,7 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                                   children: [
                                     const Expanded(
                                       flex: 1,
-                                      child: Text("Tap to choose location"),
+                                      child: Text("Reported Location"),
                                     ),
                                     Expanded(
                                       flex: 8,
