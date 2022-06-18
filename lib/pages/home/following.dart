@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/postcard.dart';
+import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Following extends StatefulWidget {
   const Following({Key? key}) : super(key: key);
@@ -10,6 +12,38 @@ class Following extends StatefulWidget {
 }
 
 class _FollowingState extends State<Following> {
+  late Position _currentLocation;
+  bool _locationEnabled = false, _isLoading = true;
+  void getLocation() async {
+    try {
+      _currentLocation = await determinePosition();
+      setState(() {
+        _locationEnabled = true;
+        _isLoading = false;
+      });
+    } catch (e) {
+      try {
+        _currentLocation = (await Geolocator.getLastKnownPosition())!;
+        showSnackbar("Using last known location to load feed", context);
+        setState(() {
+          _locationEnabled = true;
+          _isLoading = false;
+        });
+      } catch (e) {
+        showSnackbar("Please enable location services.", context);
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +79,11 @@ class _FollowingState extends State<Following> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return PostCard(
-                          snap: snapshot.data!.docs[index].data(),
-                          docId:
-                              snapshot.data!.docs[index].reference.id + "fo");
+                        snap: snapshot.data!.docs[index].data(),
+                        docId: snapshot.data!.docs[index].reference.id + "fo",
+                        currentLocation:
+                            _locationEnabled ? _currentLocation : null,
+                      );
                     },
                   );
                 },

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/upvote_downvote.dart';
+import 'package:crime_alert/components/user_inkwell.dart';
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/post%20description/post_description_screen.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -24,9 +25,21 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  late final FlutterUser _posterUser;
+  bool _userSet = false;
   //Also pass a user object or user id to identify profile of poster
+  getPoster() async {
+    _posterUser = await FireStoreMethods().getUserDetails(widget.snap['uid']);
+    if (super.mounted) {
+      setState(() {
+        _userSet = true;
+      });
+    }
+  }
+
   @override
   void initState() {
+    getPoster();
     super.initState();
   }
 
@@ -52,6 +65,7 @@ class _PostCardState extends State<PostCard> {
               id: widget.docId,
               snap: widget.snap,
               distance: distance,
+              posterUser: _posterUser,
             ));
       }),
       child: Container(
@@ -60,78 +74,13 @@ class _PostCardState extends State<PostCard> {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16)
-                  .copyWith(right: 0),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage("assets/user1.jpg"),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: const Text(
-                              "Username",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  FirebaseAuth.instance.currentUser != null &&
-                          FirebaseAuth.instance.currentUser!.uid ==
-                              widget.snap['uid']
-                      ? IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                child: ListView(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  shrinkWrap: true,
-                                  children: ['Delete']
-                                      .map((e) => InkWell(
-                                            onTap: () async {
-                                              await FireStoreMethods()
-                                                  .deletePost(
-                                                      widget.docId.substring(
-                                                          0,
-                                                          widget.docId.length -
-                                                              2),
-                                                      widget.snap['imgUrl'],
-                                                      context);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: Text(e),
-                                            ),
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.more_vert),
-                        )
-                      : Container(),
-                ],
-              ),
-              // Image section
-            ),
+            _userSet
+                ? UserInkwell(
+                    posterUser: _posterUser,
+                    postId: widget.docId,
+                    postUrl: widget.snap['imgUrl'],
+                  )
+                : Container(),
             widget.snap['imgUrl'] != null
                 ? Hero(
                     tag: widget.docId + "photo",

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -11,6 +12,31 @@ import '../model/post_model.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  //To get any user details
+  Future<FlutterUser> getUserDetails(String uid) async {
+    DocumentSnapshot snap =
+        await _firebaseFirestore.collection('users').doc(uid).get();
+    return FlutterUser.fromSnap(snap);
+  }
+
+  Future<String> setprofilePic(Uint8List file, String uid) async {
+    String res = "Some Error Occured";
+    try {
+      // to storage
+      String? photoUrl = await StorageMethods().uploadImageToStorage(
+          'users', file, false); //Is not post 'false' to overwrite user data
+      // to firestore
+      _firebaseFirestore
+          .collection('users')
+          .doc(uid)
+          .update({'photoUrl': photoUrl});
+      res = "success";
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   // upload post
   Future<String> uploadPost(String description, Uint8List? file, String uid,
       String username, GeoFirePoint reportLocation) async {
@@ -117,10 +143,12 @@ class FireStoreMethods {
   }
 
   Future<void> deletePost(
-      String postId, String postUrl, BuildContext context) async {
+      String postId, String? postUrl, BuildContext context) async {
     try {
       // Remove from storage
-      // await FirebaseStorage.instance.refFromURL(postUrl).delete();
+      if (postUrl != null) {
+        await FirebaseStorage.instance.refFromURL(postUrl).delete();
+      }
       await _firebaseFirestore.collection('posts').doc(postId).delete();
       showSnackbar("Successfully deleted post", context);
     } catch (err) {

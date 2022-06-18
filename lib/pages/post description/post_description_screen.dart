@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/upvote_downvote.dart';
+import 'package:crime_alert/model/flutter_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,6 +15,7 @@ class PostDescriptionScreen extends StatefulWidget {
   final String? picUrl;
   final String postDescription, id;
   final double distance;
+  final FlutterUser posterUser;
   // ignore: prefer_typing_uninitialized_variables
   final snap;
 
@@ -23,7 +25,8 @@ class PostDescriptionScreen extends StatefulWidget {
       required this.id,
       this.picUrl,
       required this.snap,
-      required this.distance})
+      required this.distance,
+      required this.posterUser})
       : super(key: key);
 
   @override
@@ -72,16 +75,24 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage("assets/user1.jpg"),
-                    ),
+                    widget.posterUser.photoUrl != null
+                        ? CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                NetworkImage(widget.posterUser.photoUrl!),
+                            radius: 20,
+                          )
+                        : const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage("assets/profile.png"),
+                            radius: 20,
+                          ),
                     SizedBox(width: Dimensions.width5),
                     InkWell(
                       onTap: () {},
-                      child: const Text(
-                        "Username",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      child: Text(
+                        widget.posterUser.fullName!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
