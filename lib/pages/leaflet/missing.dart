@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/components/leafletcard.dart';
 import 'package:flutter/material.dart';
-import '../../components/postcard.dart';
 
 class Missing extends StatefulWidget {
   const Missing({Key? key}) : super(key: key);
@@ -20,9 +20,10 @@ class _MissingState extends State<Missing> {
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('posts')
-                    .orderBy('datePublished', descending: true)
-                    .snapshots(),
+                    .collection('leaflets')
+                    .where('isWanted', isEqualTo: false)
+                    .get()
+                    .asStream(),
                 builder: (context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                         snapshot) {
@@ -34,7 +35,7 @@ class _MissingState extends State<Missing> {
                   if (snapshot.data!.docs.isEmpty) {
                     return const Center(
                       child: Text(
-                        "No Feeds Available\nStart following someone to see posts",
+                        "No wanted  leaflets currently available\nplease come back later",
                         textAlign: TextAlign.center,
                       ),
                     );
@@ -44,7 +45,7 @@ class _MissingState extends State<Missing> {
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return PostCard(
+                      return LeafletCard(
                           snap: snapshot.data!.docs[index].data(),
                           docId:
                               snapshot.data!.docs[index].reference.id + "mi");
