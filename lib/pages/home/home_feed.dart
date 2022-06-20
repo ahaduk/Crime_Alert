@@ -17,6 +17,7 @@ class HomeFeed extends StatefulWidget {
 class _HomeFeedState extends State<HomeFeed> {
   int _selectedPage = 0;
   late PageController _pageController;
+
   @override
   void initState() {
     _pageController = PageController();

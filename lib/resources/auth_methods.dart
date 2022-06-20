@@ -25,13 +25,16 @@ class AuthMethods {
 
     // Sign the user with the credential
     try {
-      await _auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential).then((credentials) async {
+        bool? userExists =
+            await FireStoreMethods().checkIfUserExists(credentials.user!.uid);
+        if (userExists != null && !userExists) {
+          //If user does not exist initialize data
+          FireStoreMethods().initializeUserData(
+              credentials.user!.uid, credentials.user!.phoneNumber!);
+        }
+      });
       res = "Successfully signed in";
-      if (!FireStoreMethods().checkIfUserExists(_auth.currentUser!.uid)) {
-        //If user does not exist initialize data
-        FireStoreMethods().initializeUserData(
-            _auth.currentUser!.uid, _auth.currentUser!.phoneNumber!);
-      }
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-verification-code') {
         res = 'The entered code is invalid';

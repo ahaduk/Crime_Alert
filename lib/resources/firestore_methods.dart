@@ -64,19 +64,12 @@ class FireStoreMethods {
     return res;
   }
 
-  bool checkIfUserExists(String uid) {
-    _firebaseFirestore
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        return true;
-      } else {
-        return false;
-      }
+  Future<bool?> checkIfUserExists(String uid) async {
+    bool? exists = false;
+    await _firebaseFirestore.collection('users').doc(uid).get().then((doc) {
+      exists = doc.exists;
     });
-    return false;
+    return exists;
   }
 
   String initializeUserData(String uid, String phoneNumber) {
@@ -154,5 +147,23 @@ class FireStoreMethods {
     } catch (err) {
       showSnackbar("Failed to delete post", context);
     }
+  }
+
+  Future<void> followUser(String uid, String followId) async {
+    await _firebaseFirestore.collection('users').doc(followId).update({
+      'followers': FieldValue.arrayUnion([uid])
+    });
+    await _firebaseFirestore.collection('users').doc(uid).update({
+      'following': FieldValue.arrayUnion([followId])
+    });
+  }
+
+  Future<void> unfollowUser(String uid, String followId) async {
+    await _firebaseFirestore.collection('users').doc(followId).update({
+      'followers': FieldValue.arrayRemove([uid])
+    });
+    await _firebaseFirestore.collection('users').doc(uid).update({
+      'following': FieldValue.arrayRemove([followId])
+    });
   }
 }

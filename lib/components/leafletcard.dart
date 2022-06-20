@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crime_alert/components/upvote_downvote.dart';
 
 import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
@@ -82,7 +81,7 @@ class LeafletCardState extends State<LeafletCard> {
                           InkWell(
                             onTap: () {},
                             child: const Text(
-                              "Username",
+                              "AA Police Station Mexico district",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -181,9 +180,10 @@ class LeafletCardState extends State<LeafletCard> {
                       size: 15,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 30),
                       Text(
                         timeago.format(dateTimeOfPost),
                         style: const TextStyle(
@@ -193,13 +193,12 @@ class LeafletCardState extends State<LeafletCard> {
                       ),
                       reward != 0
                           ? Text("Reward: " + reward.toString() + " birr")
-                          : Text("Reward: Unavailable "),
-
-                      Text("last seen " +
-                          distance.toStringAsFixed(2) +
-                          "KM away"),
-                      //Pass object to upvote down vote to make changes to database
-                      UpvoteDownvote(postId: widget.docId, snap: widget.snap)
+                          : const Text("Reward: Unavailable "),
+                      distance == 0
+                          ? const Text("Last seen: Unknown")
+                          : Text("Last seen: " +
+                              distance.toStringAsFixed(2) +
+                              "KM away"),
                     ],
                   )
                 ],

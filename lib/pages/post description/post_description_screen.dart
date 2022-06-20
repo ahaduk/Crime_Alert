@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/upvote_downvote.dart';
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/pages/profile_view/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../utility/dimensions.dart';
@@ -89,11 +91,19 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                           ),
                     SizedBox(width: Dimensions.width5),
                     InkWell(
-                      onTap: () {},
-                      child: Text(
-                        widget.posterUser.fullName!,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      onTap: () {
+                        Get.to(() => ProfileView(fuser: widget.posterUser));
+                      },
+                      child: widget.posterUser.fullName != null
+                          ? Text(
+                              widget.posterUser.fullName!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          : const Text(
+                              "Unkown User",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                     ),
                   ],
                 ),

@@ -1,7 +1,9 @@
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/pages/profile_view/profile_view.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class UserInkwell extends StatelessWidget {
   final FlutterUser posterUser;
@@ -18,36 +20,42 @@ class UserInkwell extends StatelessWidget {
           .copyWith(right: 0),
       child: Row(
         children: [
-          posterUser.photoUrl != null
-              ? CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(posterUser.photoUrl!),
-                )
-              : const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage("assets/profile.png"),
-                  backgroundColor: Colors.white,
-                ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () {},
-                    child: posterUser.fullName != null
-                        ? Text(
-                            posterUser.fullName!,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+              child: GestureDetector(
+                onTap: () {
+                  Get.to(() => ProfileView(fuser: posterUser));
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    posterUser.photoUrl != null
+                        ? CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(posterUser.photoUrl!),
                           )
-                        : const Text(
-                            "Unknown User",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        : const CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage("assets/profile.png"),
+                            backgroundColor: Colors.white,
                           ),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    InkWell(
+                      child: posterUser.fullName != null
+                          ? Text(
+                              posterUser.fullName!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          : const Text(
+                              "Unknown User",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

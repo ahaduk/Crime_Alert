@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crime_alert/components/upvote_downvote.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../utility/dimensions.dart';
-import '../../widget/big_text.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -102,9 +100,11 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                 )
               ],
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: widget.picUrl != null
+                  ? MediaQuery.of(context).size.height * 0.65
+                  : null,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -135,7 +135,7 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                                 child: Text(
                                   widget.postDescription,
                                   textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 16.0),
+                                  style: const TextStyle(fontSize: 16.0),
                                 )),
                           )),
                     ),
@@ -150,7 +150,7 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                 children: [
                   widget.reward != 0
                       ? Text("Reward: " + widget.reward.toString() + " birr")
-                      : Text("Reward: Unavailable")
+                      : const Text("Reward: Unavailable")
                 ],
               ),
             ),
@@ -202,7 +202,7 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                                   children: [
                                     const Expanded(
                                       flex: 1,
-                                      child: Text("Tap to choose location"),
+                                      child: Text("Last seen location"),
                                     ),
                                     Expanded(
                                       flex: 8,
@@ -232,14 +232,11 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                             });
                       },
                       child: Row(
-                        children: [
-                          const Icon(Icons.map),
-                          Text("Last known location is " +
-                              widget.distance.toStringAsFixed(2) +
-                              " KM away"),
+                        children: const [
+                          Icon(Icons.map),
+                          Text("Show last seen location"),
                         ],
                       )),
-                  UpvoteDownvote(postId: widget.id, snap: widget.snap),
                 ],
               ),
             ),
