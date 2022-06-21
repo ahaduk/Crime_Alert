@@ -102,9 +102,7 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
             ),
             SizedBox(
               width: double.infinity,
-              height: widget.picUrl != null
-                  ? MediaQuery.of(context).size.height * 0.65
-                  : null,
+              height: MediaQuery.of(context).size.height * 0.65,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(

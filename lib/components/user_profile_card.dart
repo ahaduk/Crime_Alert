@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-// import 'package:crime_alert/components/follow_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/follow_button.dart';
 import 'package:crime_alert/components/unfollow_button.dart';

@@ -21,7 +21,9 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
         //Removing last two characters as the id comes appended from post
         widget.postId.substring(0, widget.postId.length - 2),
         FirebaseAuth.instance.currentUser!.uid,
-        widget.snap['upvotes']);
+        widget.snap['uid'],
+        widget.snap['upvotes'],
+        widget.snap['downvotes']);
     if (res != null) {
       showSnackbar(res, context);
     }
@@ -31,6 +33,8 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
     String? res = await FireStoreMethods().downvote(
         widget.postId.substring(0, widget.postId.length - 2),
         FirebaseAuth.instance.currentUser!.uid,
+        widget.snap['uid'],
+        widget.snap['upvotes'],
         widget.snap['downvotes']);
     if (res != null) {
       showSnackbar(res, context);

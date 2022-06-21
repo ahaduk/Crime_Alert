@@ -163,7 +163,7 @@ class LeafletCardState extends State<LeafletCard> {
                           );
                         },
                       ),
-                    ))
+                    ),)
                 : Container(),
             // text section
 

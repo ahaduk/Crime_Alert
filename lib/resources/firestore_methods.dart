@@ -89,7 +89,14 @@ class FireStoreMethods {
     return res;
   }
 
-  Future<String?> upvote(String postId, String uid, List? upvotes) async {
+  void updateTrustPoint(String uid, int updateVal) async {
+    await _firebaseFirestore.collection('users').doc(uid).update({
+      'trustPoint': FieldValue.increment(updateVal),
+    });
+  }
+
+  Future<String?> upvote(String postId, String uid, String posterId,
+      List? upvotes, List? downvotes) async {
     try {
       if (upvotes != null && upvotes.contains(uid)) {
         await _firebaseFirestore.collection('posts').doc(postId).update({
@@ -106,13 +113,27 @@ class FireStoreMethods {
           'downvotes': [],
         });
       }
+      //If upvoted before trust point -1
+      if (upvotes!.contains(uid)) {
+        updateTrustPoint(posterId, -1);
+        //print("-1");
+      } else if (!downvotes!.contains(uid)) {
+        updateTrustPoint(posterId, 1);
+        //print("+1");
+      }
+      //If downvoted before trust point +2
+      if (downvotes!.contains(uid)) {
+        updateTrustPoint(posterId, 2);
+        // print("+2");
+      }
     } catch (e) {
       return e.toString();
     }
     return null;
   }
 
-  Future<String?> downvote(String postId, String uid, List? downvotes) async {
+  Future<String?> downvote(String postId, String uid, String posterId,
+      List? upvotes, List? downvotes) async {
     try {
       if (downvotes != null && downvotes.contains(uid)) {
         await _firebaseFirestore.collection('posts').doc(postId).update({
@@ -128,6 +149,19 @@ class FireStoreMethods {
           'upvotes': [],
           'downvotes': FieldValue.arrayUnion([uid]),
         });
+      }
+      //If downvoted before +1
+      if (downvotes!.contains(uid)) {
+        // print("+1");
+        updateTrustPoint(posterId, 1);
+      } else if (!upvotes!.contains(uid)) {
+        // print("-1");
+        updateTrustPoint(posterId, -1);
+      }
+      //If upvoted before -2
+      if (upvotes!.contains(uid)) {
+        // print("-2");
+        updateTrustPoint(posterId, -2);
       }
     } catch (e) {
       return e.toString();
