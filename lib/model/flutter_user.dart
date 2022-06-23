@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class FlutterUser {
   final String? fullName;
@@ -11,6 +12,7 @@ class FlutterUser {
   final String? bio;
   final List? followers;
   final List? following;
+  final GeoFirePoint? lastKnownLocation;
   const FlutterUser(
       {this.fullName,
       required this.phoneNumber,
@@ -21,7 +23,8 @@ class FlutterUser {
       this.trustPoint,
       this.bio,
       this.followers,
-      this.following});
+      this.following,
+      this.lastKnownLocation});
   Map<String, dynamic> toJson() => {
         "fullName": fullName,
         "phoneNumber": phoneNumber,
@@ -32,7 +35,8 @@ class FlutterUser {
         "trustPoint": trustPoint,
         "bio": bio,
         "followers": followers,
-        "following": following
+        "following": following,
+        "lastKnownLocation": lastKnownLocation
       };
   static FlutterUser fromSnap(DocumentSnapshot snap) {
     var snapShot = snap.data() as Map<String, dynamic>;

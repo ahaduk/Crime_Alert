@@ -22,11 +22,13 @@ class Post {
       };
   static Post fromSnap(DocumentSnapshot snap) {
     var snapShot = snap.data() as Map<String, dynamic>;
+    GeoPoint p1 = snapShot['reportLocation']['geopoint'] as GeoPoint;
+    GeoFirePoint p2 = GeoFirePoint(p1.latitude, p1.longitude);
     return Post(
         description: snapShot['description'],
         uid: snapShot['uid'],
-        datePublished: snapShot['datePublished'],
+        datePublished: (snapShot['datePublished'] as Timestamp).toDate(),
         imgUrl: snapShot['imgUrl'],
-        reportLocation: snapShot['reportLocation']);
+        reportLocation: p2);
   }
 }

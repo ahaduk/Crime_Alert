@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../widget/big_text.dart';
+import 'Skeleton.dart';
 
 class PostCard extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -80,7 +81,17 @@ class _PostCardState extends State<PostCard> {
                     postId: widget.docId,
                     postUrl: widget.snap['imgUrl'],
                   )
-                : Container(),
+                //Show skeleton during user data fetch
+                : Padding(
+                    padding: const EdgeInsets.only(left: 25, bottom: 10),
+                    child: Row(
+                      children: const [
+                        Skeleton(height: 40, width: 40),
+                        SizedBox(width: 10),
+                        Skeleton(width: 120),
+                      ],
+                    ),
+                  ),
             widget.snap['imgUrl'] != null
                 ? Hero(
                     tag: widget.docId + "photo",

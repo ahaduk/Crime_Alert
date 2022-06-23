@@ -2,6 +2,7 @@ import 'package:crime_alert/components/no_account_text.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
+import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -78,30 +79,37 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                             value: _toggled,
                             onChanged: (bool value) {
+                              String res = FireStoreMethods().toggleKeepMeAlert(
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  value);
+                              showSnackbar(res, context);
                               setState(() {
                                 _toggled = value;
                               });
                             })
                         : Container(),
-                    ListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      leading: const Icon(
-                        Icons.verified_user_outlined,
-                        size: 26,
-                        color: AppColors.iconColor1,
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 18,
-                        color: AppColors.iconColor2,
-                      ),
-                      title: BigText(
-                        text: "New Version",
-                        size: Dimensions.font16,
-                        color: AppColors.textColor,
-                      ),
-                      onTap: () {},
-                    ),
+                    //Need to be signed to bookmark
+                    FirebaseAuth.instance.currentUser != null
+                        ? ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: const Icon(
+                              Icons.bookmark,
+                              size: 26,
+                              color: AppColors.iconColor1,
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 18,
+                              color: AppColors.iconColor2,
+                            ),
+                            title: BigText(
+                              text: "Bookmarks",
+                              size: Dimensions.font16,
+                              color: AppColors.textColor,
+                            ),
+                            onTap: () {},
+                          )
+                        : Container(),
                     //  User Agreement
                     ListTile(
                       contentPadding: const EdgeInsets.all(0),

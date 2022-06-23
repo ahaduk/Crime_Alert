@@ -7,6 +7,7 @@ import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../model/post_model.dart';
 
@@ -86,6 +87,34 @@ class FireStoreMethods {
         .set(userToInitialize.toJson())
         .then((value) => "User Added")
         .catchError((error) => "Failed to add user: $error");
+    return res;
+  }
+
+  Future<Position?> getLocation() async {
+    Position _currentLocation;
+    try {
+      _currentLocation = await determinePosition();
+    } catch (e) {
+      _currentLocation = (await Geolocator.getLastKnownPosition())!;
+    }
+    return _currentLocation;
+  }
+
+  String toggleKeepMeAlert(String uid, bool toggleValue) {
+    String res = "Failed to toggle alert";
+    try {
+      _firebaseFirestore
+          .collection('users')
+          .doc(uid)
+          .update({'keepMeAlert': toggleValue});
+
+      res = toggleValue
+          ? "You will receive SMS alerts"
+          : "Turned off SMS notifications";
+    } catch (e) {
+      res = "Failed to toggle alert: " + e.toString();
+    }
+
     return res;
   }
 

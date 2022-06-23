@@ -38,6 +38,7 @@ dependencies:
   geolocator: ^8.2.1
   geoflutterfire: ^3.0.3
   flutter_slidable: ^1.3.0
+  syncfusion_flutter_charts: ^20.1.61
   font_awesome_flutter: ^10.1.0
   uuid: ^3.0.5
   timeago: ^3.2.2
