@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/login_screen.dart';
 import 'package:crime_alert/pages/profile_view/profile_view.dart';
@@ -49,10 +50,32 @@ class _UserProfileAvatarState extends State<UserProfileAvatar> {
             Get.to(() => ProfileView(fuser: _fuser!));
           }
         },
-        child: _fuser != null && _fuser!.photoUrl != null
-            ? CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(_fuser!.photoUrl!))
+        child: FirebaseAuth.instance.currentUser != null
+            ? StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                  if (snapshot.data != null) {
+                    return StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<DocumentSnapshot?> usersnap) {
+                          var userDocument = usersnap.data;
+                          if (usersnap.hasData && userDocument!["isAgent"]) {
+                            _fuser = FlutterUser.fromSnap(userDocument);
+                            return CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage:
+                                    NetworkImage(_fuser!.photoUrl!));
+                          }
+                          return Container();
+                        });
+                  }
+                  return Container();
+                },
+              )
             : const CircleAvatar(
                 backgroundColor: Colors.white,
                 backgroundImage: AssetImage("assets/profile.png"),

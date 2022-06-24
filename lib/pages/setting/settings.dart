@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/no_account_text.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
@@ -52,19 +53,40 @@ class _SettingsPageState extends State<SettingsPage> {
                   left: Dimensions.width30, top: 80, right: Dimensions.width30),
               child: Column(
                 children: [
-                  // User Profile
-                  FirebaseAuth.instance.currentUser != null && _fuser != null
-                      ? UserProfileCard(
-                          ownProfile: true,
-                          fuser: _fuser!,
-                        )
-                      : const NoAccountText(),
+                  // Conditionally show user profile card if user signed in
+                  StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                      if (snapshot.data != null) {
+                        //If logged in
+                        return StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<DocumentSnapshot?> usersnap) {
+                              var userDocument = usersnap.data;
+                              if (usersnap.hasData) {
+                                _fuser = FlutterUser.fromSnap(userDocument!);
+                                return UserProfileCard(
+                                  ownProfile: true,
+                                  fuser: _fuser!,
+                                );
+                              }
+                              return Container();
+                            });
+                      }
+                      return const NoAccountText();
+                    },
+                  ),
                   SizedBox(
                     height: Dimensions.height20,
                   ),
                   //  Settings
                   Column(children: [
-                    FirebaseAuth.instance.currentUser != null
+                    _fuser != null
                         ? SwitchListTile(
                             contentPadding: const EdgeInsets.all(0),
                             secondary: const Icon(
@@ -78,10 +100,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               color: AppColors.textColor,
                             ),
                             value: _toggled,
-                            onChanged: (bool value) {
-                              String res = FireStoreMethods().toggleKeepMeAlert(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  value);
+                            onChanged: (bool value) async {
+                              String res = await FireStoreMethods()
+                                  .toggleKeepMeAlert(
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                      value);
                               showSnackbar(res, context);
                               setState(() {
                                 _toggled = value;
@@ -89,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             })
                         : Container(),
                     //Need to be signed to bookmark
-                    FirebaseAuth.instance.currentUser != null
+                    _fuser != null
                         ? ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             leading: const Icon(
@@ -201,7 +224,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ]);
                       },
                     ),
-                    FirebaseAuth.instance.currentUser != null
+                    _fuser != null
                         ? ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             leading: const Icon(
@@ -218,11 +241,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               await AuthMethods().signOut();
                               showSnackbar("Signed out successfully".toString(),
                                   context);
-                              setState(() {});
+                              setState(() {
+                                _fuser = null;
+                              });
                             },
                           )
                         : Container(),
-                  ])
+                  ]),
                 ],
               )),
         ),

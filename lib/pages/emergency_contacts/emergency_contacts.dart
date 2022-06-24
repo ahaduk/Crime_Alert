@@ -50,7 +50,7 @@ class EmergencyPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "The mentioned contacts are not for drill and misuse of them is punishable by law!\nPlease use them respnsiblly.",
+                  "The mentioned contacts are not for drill and misuse of them is punishable by law!\n\nPlease use them responsibly.",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red),
                 ),

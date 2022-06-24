@@ -121,7 +121,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                               border: InputBorder.none,
                             ),
                             controller: _descriptionController,
-                            maxLength: 70,
+                            maxLength: 200,
                             maxLines: 8),
                       ),
                     ],

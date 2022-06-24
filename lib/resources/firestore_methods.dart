@@ -13,6 +13,7 @@ import '../model/post_model.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final geo = Geoflutterfire();
   //To get any user details
   Future<FlutterUser> getUserDetails(String uid) async {
     DocumentSnapshot snap =
@@ -98,24 +99,6 @@ class FireStoreMethods {
       _currentLocation = (await Geolocator.getLastKnownPosition())!;
     }
     return _currentLocation;
-  }
-
-  String toggleKeepMeAlert(String uid, bool toggleValue) {
-    String res = "Failed to toggle alert";
-    try {
-      _firebaseFirestore
-          .collection('users')
-          .doc(uid)
-          .update({'keepMeAlert': toggleValue});
-
-      res = toggleValue
-          ? "You will receive SMS alerts"
-          : "Turned off SMS notifications";
-    } catch (e) {
-      res = "Failed to toggle alert: " + e.toString();
-    }
-
-    return res;
   }
 
   void updateTrustPoint(String uid, int updateVal) async {
@@ -228,5 +211,35 @@ class FireStoreMethods {
     await _firebaseFirestore.collection('users').doc(uid).update({
       'following': FieldValue.arrayRemove([followId])
     });
+  }
+
+  Future<String> toggleKeepMeAlert(String uid, bool toggleValue) async {
+    String res = "Failed to toggle alert";
+    Position? _currentLocation;
+    try {
+      if (toggleValue == true) {
+        await determinePosition()
+            .then((value) => _currentLocation = value)
+            .then((value) => null);
+        GeoFirePoint myLocation = geo.point(
+            latitude: _currentLocation!.latitude,
+            longitude: _currentLocation!.longitude);
+        _firebaseFirestore.collection('users').doc(uid).update(
+            {'keepMeAlert': toggleValue, 'lastKnownLocation': myLocation.data});
+      } else {
+        _firebaseFirestore
+            .collection('users')
+            .doc(uid)
+            .update({'keepMeAlert': toggleValue});
+      }
+
+      res = toggleValue
+          ? "You will receive SMS alerts"
+          : "Turned off SMS notifications";
+    } catch (e) {
+      res = "Failed to toggle alert: " + e.toString();
+    }
+
+    return res;
   }
 }
