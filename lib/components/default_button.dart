@@ -18,7 +18,7 @@ class DefaultButton extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(
           gradient: AppColors.defaultGradient(),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: TextButton(
           onPressed: press,

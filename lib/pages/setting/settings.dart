@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/components/keep_me_alert_switch.dart';
 import 'package:crime_alert/components/no_account_text.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
-import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +60,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         (BuildContext context, AsyncSnapshot<User?> snapshot) {
                       if (snapshot.data != null) {
                         //If logged in
-                        return StreamBuilder(
-                            stream: FirebaseFirestore.instance
+                        return FutureBuilder(
+                            future: FirebaseFirestore.instance
                                 .collection('users')
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .snapshots(),
+                                .get(),
                             builder: (context,
                                 AsyncSnapshot<DocumentSnapshot?> usersnap) {
                               var userDocument = usersnap.data;
@@ -87,29 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   //  Settings
                   Column(children: [
                     _fuser != null
-                        ? SwitchListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            secondary: const Icon(
-                              Icons.alarm,
-                              size: 26,
-                              color: AppColors.iconColor1,
-                            ),
-                            title: BigText(
-                              text: "Keep Me alert",
-                              size: Dimensions.font16,
-                              color: AppColors.textColor,
-                            ),
-                            value: _toggled,
-                            onChanged: (bool value) async {
-                              String res = await FireStoreMethods()
-                                  .toggleKeepMeAlert(
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      value);
-                              showSnackbar(res, context);
-                              setState(() {
-                                _toggled = value;
-                              });
-                            })
+                        ? KeepMeAlert(toggled: _toggled)
                         : Container(),
                     //Need to be signed to bookmark
                     _fuser != null
@@ -174,26 +152,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () {
                         Get.to(() => const EmergencyPage());
                       },
-                    ),
-                    // Privacy
-                    ListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      leading: const Icon(
-                        Icons.lock_outline,
-                        size: 26,
-                        color: AppColors.iconColor1,
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 18,
-                        color: AppColors.iconColor2,
-                      ),
-                      title: BigText(
-                        text: "Privacy",
-                        size: Dimensions.font16,
-                        color: AppColors.textColor,
-                      ),
-                      onTap: () {},
                     ),
                     //  About crime alert
                     ListTile(

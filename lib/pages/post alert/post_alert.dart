@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:crime_alert/components/user_profile_avatar.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.mainColor,
         elevation: 0,
         actions: [
           TextButton(
@@ -78,7 +79,6 @@ class _PostAlertPageState extends State<PostAlertPage> {
                     _descriptionController.text,
                     _file,
                     FirebaseAuth.instance.currentUser!.uid,
-                    "Test data",
                     geo.point(
                         latitude: _selectedLocation.position.latitude,
                         longitude: _selectedLocation.position.longitude));
@@ -92,12 +92,17 @@ class _PostAlertPageState extends State<PostAlertPage> {
                   showSnackbar("Failed to upload alert", context);
                 }
               },
-              child: const Text("Post"))
+              child: const Text(
+                "Post Alert",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ))
         ],
         title: Text(
           "Post an Alert",
           style: TextStyle(
-            color: Colors.grey,
+            color: Colors.black,
             fontSize: Dimensions.font16,
           ),
         ),
@@ -108,6 +113,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
           : SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,12 +123,22 @@ class _PostAlertPageState extends State<PostAlertPage> {
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: TextField(
                             decoration: const InputDecoration(
+                              focusColor: Colors.black,
                               hintText: 'Write a caption...',
-                              border: InputBorder.none,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.black),
+                                gapPadding: 10,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                                gapPadding: 10,
+                              ),
                             ),
                             controller: _descriptionController,
                             maxLength: 200,
-                            maxLines: 8),
+                            maxLines: 5),
                       ),
                     ],
                   ),

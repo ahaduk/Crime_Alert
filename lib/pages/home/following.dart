@@ -61,6 +61,7 @@ class _FollowingState extends State<Following> {
       backgroundColor: Colors.white,
       body: Stack(children: [
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FirebaseAuth.instance.currentUser == null
                 ? const Center(

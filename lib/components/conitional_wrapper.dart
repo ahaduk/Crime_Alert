@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/pages/post%20alert/post_alert.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,8 @@ class _WrapperState extends State<Wrapper> {
                     onPressed: () {
                       Get.to(() => const PostAlertPage());
                     },
-                    backgroundColor: Colors.black,
+                    backgroundColor: AppColors.mainColor,
+                    foregroundColor: Colors.black,
                     child: const Icon(Icons.add, size: 30),
                   );
                 }

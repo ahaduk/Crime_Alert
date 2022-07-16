@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/upvote_downvote.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/profile_view/profile_view.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -56,12 +57,12 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
         (widget.snap['datePublished'] as Timestamp).toDate();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.mainColor,
         elevation: 0,
         title: Text(
           "Post Description",
           style: TextStyle(
-            color: Colors.grey,
+            color: Colors.black,
             fontSize: Dimensions.font16,
           ),
         ),
@@ -71,6 +72,7 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

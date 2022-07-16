@@ -2,6 +2,7 @@ import 'package:crime_alert/components/conitional_wrapper.dart';
 import 'package:crime_alert/pages/home/home_feed.dart';
 import 'package:crime_alert/pages/leaflet/leaflet_feed.dart';
 import 'package:crime_alert/pages/setting/settings.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,6 +56,7 @@ class MyAppState extends State<MyApp> {
               elevation: 0,
               iconTheme: IconThemeData(color: Colors.black))),
       home: Scaffold(
+        backgroundColor: AppColors.mainColor,
         //Use Indexed stack to have persisting data
         body: IndexedStack(
           index: _selectedIndex,
@@ -66,7 +68,9 @@ class MyAppState extends State<MyApp> {
           elevation: 0,
           currentIndex: _selectedIndex,
           onTap: _navigatBottomBar,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
+          unselectedItemColor: Colors.white,
+          selectedItemColor: AppColors.iconColor2,
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),

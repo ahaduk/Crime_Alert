@@ -41,7 +41,7 @@ class FireStoreMethods {
 
   // upload post
   Future<String> uploadPost(String description, Uint8List? file, String uid,
-      String username, GeoFirePoint reportLocation) async {
+      GeoFirePoint reportLocation) async {
     String res = "Some Error Occured";
     try {
       String? photoUrl;
@@ -59,6 +59,7 @@ class FireStoreMethods {
       );
       // to firestore
       _firebaseFirestore.collection('posts').add(post.toJson());
+      _firebaseFirestore.collection('temp_posts').add(post.toJson());
       res = "success";
     } catch (err) {
       res = err.toString();

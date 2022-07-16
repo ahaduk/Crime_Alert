@@ -4,6 +4,7 @@ import 'package:crime_alert/components/user_inkwell.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/post%20description/post_description_screen.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -70,9 +71,9 @@ class _PostCardState extends State<PostCard> {
             ));
       }),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-        margin: const EdgeInsets.only(bottom: 4),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: Constants.cardBoxDecoration,
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           children: [
             _userSet
@@ -138,6 +139,7 @@ class _PostCardState extends State<PostCard> {
                       size: 15,
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

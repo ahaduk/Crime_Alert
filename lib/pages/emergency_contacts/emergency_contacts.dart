@@ -1,11 +1,8 @@
 import 'package:crime_alert/components/user_profile_avatar.dart';
-import 'package:crime_alert/pages/setting/settings.dart';
-import 'package:crime_alert/utility/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 
 class EmergencyPage extends StatelessWidget {
   const EmergencyPage({Key? key}) : super(key: key);
@@ -13,30 +10,19 @@ class EmergencyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        title: const Text('Emergency'),
+        centerTitle: true,
+        actions: const [
+          Padding(
+              padding: EdgeInsets.only(right: 20), child: UserProfileAvatar())
+        ],
+      ),
       body: Wrap(
         runSpacing: 15,
         children: [
-          Container(
-            margin: EdgeInsets.only(
-                top: Dimensions.height45, bottom: Dimensions.width10),
-            padding: EdgeInsets.only(
-                left: Dimensions.width10, right: Dimensions.width20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Get.back(result: () => const SettingsPage());
-                    },
-                    icon: const Icon(Icons.arrow_back)),
-                const Text(
-                  "Emergency",
-                  style: TextStyle(fontSize: 20),
-                ),
-                const Center(child: UserProfileAvatar())
-              ],
-            ),
-          ),
           const Center(
             child: Icon(
               Icons.warning_rounded,

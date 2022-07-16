@@ -46,14 +46,17 @@ class _HomeFeedState extends State<HomeFeed> {
         Container(
           margin: EdgeInsets.only(
               top: Dimensions.height45, bottom: Dimensions.width10),
-          padding: EdgeInsets.only(
-              left: Dimensions.width20, right: Dimensions.width20),
+          padding: EdgeInsets.only(right: Dimensions.width20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const BigText(
-                text: "Logo ",
-                color: Color.fromARGB(255, 178, 180, 178),
+              Container(
+                height: 40,
+                width: 100,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/screenlogo.png'),
+                        fit: BoxFit.cover)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -57,9 +55,9 @@ class LeafletCardState extends State<LeafletCard> {
             ));
       }),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-        margin: const EdgeInsets.only(bottom: 4),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: Constants.cardBoxDecoration,
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           children: [
             Container(
@@ -89,47 +87,6 @@ class LeafletCardState extends State<LeafletCard> {
                       ),
                     ),
                   ),
-                  FirebaseAuth.instance.currentUser != null &&
-                          FirebaseAuth.instance.currentUser!.uid ==
-                              widget.snap['uid']
-                      ? IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                child: ListView(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  shrinkWrap: true,
-                                  children: ['Delete']
-                                      .map((e) => InkWell(
-                                            onTap: () async {
-                                              await FireStoreMethods()
-                                                  .deletePost(
-                                                      widget.docId.substring(
-                                                          0,
-                                                          widget.docId.length -
-                                                              2),
-                                                      widget.snap['imgUrl'],
-                                                      context);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: Text(e),
-                                            ),
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.more_vert),
-                        )
-                      : Container(),
                 ],
               ),
               // Image section
@@ -163,11 +120,12 @@ class LeafletCardState extends State<LeafletCard> {
                           );
                         },
                       ),
-                    ),)
+                    ),
+                  )
                 : Container(),
             // text section
-
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,9 +149,11 @@ class LeafletCardState extends State<LeafletCard> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(height: 10),
                       reward != 0
                           ? Text("Reward: " + reward.toString() + " birr")
                           : const Text("Reward: Unavailable "),
+                      const SizedBox(height: 10),
                       distance == 0
                           ? const Text("Last seen: Unknown")
                           : Text("Last seen: " +

@@ -1,4 +1,5 @@
 import 'package:crime_alert/components/default_button.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/dimensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -162,12 +163,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.iconColor2,
         elevation: 0,
         title: Text(
-          codeSent ? "Verify Phone Number" : "Sign In",
+          codeSent ? "Verify Phone Number" : "Sign In With Phone Number",
           style: TextStyle(
-            color: Colors.grey,
+            color: Colors.black,
             fontSize: Dimensions.font16,
           ),
         ),
@@ -179,12 +180,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   SimpleDialog buildPhoneConfirmationPopup(BuildContext context) {
     return SimpleDialog(
+      backgroundColor: AppColors.iconColor4,
       title: Text(
         "Confirm Phone Number",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: Dimensions.font16),
       ),
-      contentPadding: const EdgeInsets.all(20.0),
+      contentPadding: const EdgeInsets.all(20).copyWith(top: 5),
       children: [
         const Text("We are going to send confimation code to ",
             textAlign: TextAlign.center),
@@ -197,21 +199,36 @@ class _LoginScreenState extends State<LoginScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Cancel")),
-            TextButton(
-                onPressed: () {
-                  //Continue to verification page after continue
-                  Navigator.of(context).pop();
-                  setState(() {
-                    isSending = true;
-                  });
-                  sendOtp();
-                },
-                child: const Text("Continue"))
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black),
+                  foregroundColor:
+                      MaterialStateProperty.all(AppColors.iconColor3)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //Continue to verification page after continue
+                Navigator.of(context).pop();
+                setState(() {
+                  isSending = true;
+                });
+                sendOtp();
+              },
+              child: const Text('Continue'),
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3),
+                          side: const BorderSide(color: Colors.black))),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  foregroundColor: MaterialStateProperty.all(Colors.black)),
+            ),
           ],
         ),
       ],
