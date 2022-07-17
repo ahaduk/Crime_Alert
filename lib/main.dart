@@ -71,6 +71,7 @@ class MyAppState extends State<MyApp> {
         backgroundColor: AppColors.mainColor,
         //Use Indexed stack to have persisting data
         body: IndexedStack(
+          sizing: StackFit.expand,
           index: _selectedIndex,
           children: _pages,
         ),
