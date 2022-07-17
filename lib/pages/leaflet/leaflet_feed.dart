@@ -40,7 +40,7 @@ class _LeafletFeedState extends State<LeafletFeed> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(fit: StackFit.expand, children: [
       Column(children: [
         Container(
           margin: EdgeInsets.only(
