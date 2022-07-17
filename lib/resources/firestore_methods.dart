@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -19,6 +20,14 @@ class FireStoreMethods {
     DocumentSnapshot snap =
         await _firebaseFirestore.collection('users').doc(uid).get();
     return FlutterUser.fromSnap(snap);
+  }
+
+  Future<PoliceStation> getPoliceInfo(String uid) async {
+    QuerySnapshot snap = await _firebaseFirestore
+        .collection('policeStation')
+        .where('uid', isEqualTo: uid)
+        .get();
+    return PoliceStation.fromSnap(snap.docs[0]);
   }
 
   Future<String> setprofilePic(Uint8List file, String uid) async {

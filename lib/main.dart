@@ -9,13 +9,22 @@ import 'package:get/get.dart';
 
 import 'firebase_options.dart';
 import 'pages/stats/statistics_page.dart';
+import 'dart:io';
+
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //Splash screen
+  // FlutterNativeSplash.removeAfter(initilization);
   runApp(const MyApp());
+}
+
+Future initilization(BuildContext? context) async {
+  await Future.delayed(const Duration(seconds: 3));
 }
 
 class MyApp extends StatefulWidget {
@@ -43,6 +52,8 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
   @override
@@ -50,6 +61,7 @@ class MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          fontFamily: 'Montserrat',
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: const AppBarTheme(
               color: Colors.black,

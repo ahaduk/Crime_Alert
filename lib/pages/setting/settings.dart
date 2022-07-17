@@ -3,6 +3,7 @@ import 'package:crime_alert/components/keep_me_alert_switch.dart';
 import 'package:crime_alert/components/no_account_text.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/pages/emergency_contacts/emergency_contacts.dart';
+import 'package:crime_alert/pages/user_agreement/user_agreement.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -129,7 +130,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         size: Dimensions.font16,
                         color: AppColors.textColor,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const UserAgreement());
+                      },
                     ),
                     //  Emergency
                     ListTile(
@@ -157,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ListTile(
                       contentPadding: const EdgeInsets.all(0),
                       leading: const Icon(
-                        Icons.star_border,
+                        Icons.info,
                         size: 26,
                         color: AppColors.iconColor1,
                       ),

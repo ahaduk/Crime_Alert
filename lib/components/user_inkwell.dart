@@ -92,7 +92,7 @@ class UserInkwell extends StatelessWidget {
                           builder: (context) => SimpleDialog(
                                 backgroundColor: AppColors.iconColor4,
                                 title: Text(
-                                  "Are You Sure You Wand To Delete That Post?",
+                                  "Are You Sure You Want To Delete That Post?",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: Dimensions.font16),
                                 ),

@@ -98,13 +98,15 @@ class _PostCardFromListState extends State<PostCardFromList> {
                     child: Image.network(
                       widget.post.imgUrl!,
                       fit: BoxFit.fitWidth,
-                      errorBuilder: (context, url, error) => Center(
+                      errorBuilder: (context, url, error) => SizedBox(
+                          width: double.infinity,
                           child: Row(
-                        children: const [
-                          Icon(Icons.error),
-                          Text('Unable to load image')
-                        ],
-                      )),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.error),
+                              Text('Unable to load image')
+                            ],
+                          )),
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;

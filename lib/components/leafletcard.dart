@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/components/police_inkwell.dart';
+import 'package:crime_alert/model/police_station.dart';
+import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:crime_alert/components/Skeleton.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../pages/post description/leaflet_description_screen.dart';
 import '../widget/big_text.dart';
@@ -22,6 +26,23 @@ class LeafletCard extends StatefulWidget {
 }
 
 class LeafletCardState extends State<LeafletCard> {
+  late final PoliceStation _policeStation;
+  bool _policeSet = false;
+  getPoliceStation() async {
+    _policeStation = await FireStoreMethods().getPoliceInfo(widget.snap['uid']);
+    if (super.mounted) {
+      setState(() {
+        _policeSet = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getPoliceStation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime dateTimeOfPost =
@@ -46,13 +67,13 @@ class LeafletCardState extends State<LeafletCard> {
     return GestureDetector(
       onTap: (() {
         Get.to(() => LeafletDescriptionScreen(
-              picUrl: widget.snap['imgUrl'],
-              postDescription: widget.snap['description'],
-              id: widget.docId,
-              snap: widget.snap,
-              distance: distance,
-              reward: reward,
-            ));
+            picUrl: widget.snap['imgUrl'],
+            postDescription: widget.snap['description'],
+            id: widget.docId,
+            snap: widget.snap,
+            distance: distance,
+            reward: reward,
+            policeStation: _policeStation));
       }),
       child: Container(
         decoration: Constants.cardBoxDecoration,
@@ -60,37 +81,18 @@ class LeafletCardState extends State<LeafletCard> {
         padding: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16)
-                  .copyWith(right: 0),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage("assets/user1.jpg"),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: const Text(
-                              "AA Police Station Mexico district",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
+            _policeSet
+                ? PoliceInkwell(policeStation: _policeStation)
+                : Padding(
+                    padding: const EdgeInsets.only(left: 25, bottom: 10),
+                    child: Row(
+                      children: const [
+                        Skeleton(height: 40, width: 40),
+                        SizedBox(width: 10),
+                        Skeleton(width: 120),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              // Image section
-            ),
             widget.snap['imgUrl'] != null
                 ? Hero(
                     tag: widget.docId + "photo",
@@ -100,13 +102,15 @@ class LeafletCardState extends State<LeafletCard> {
                       child: Image.network(
                         widget.snap['imgUrl'],
                         fit: BoxFit.fitWidth,
-                        errorBuilder: (context, url, error) => Center(
+                        errorBuilder: (context, url, error) => SizedBox(
+                            width: double.infinity,
                             child: Row(
-                          children: const [
-                            Icon(Icons.error),
-                            Text('Unable to load image')
-                          ],
-                        )),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(Icons.error),
+                                Text('Unable to load image')
+                              ],
+                            )),
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) return child;

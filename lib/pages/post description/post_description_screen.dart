@@ -130,7 +130,18 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                       width: double.infinity,
                       child: Hero(
                         tag: widget.id + "photo",
-                        child: Image.network(widget.picUrl!),
+                        child: Image.network(
+                          widget.picUrl!,
+                          errorBuilder: (context, url, error) => SizedBox(
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(Icons.error),
+                                  Text('Unable to load image')
+                                ],
+                              )),
+                        ),
                       ),
                     ),
                   )

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crime_alert/components/police_inkwell.dart';
+import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +16,7 @@ class LeafletDescriptionScreen extends StatefulWidget {
   final String postDescription, id;
   final double distance;
   final int reward;
+  final PoliceStation policeStation;
 
   // ignore: prefer_typing_uninitialized_variables
   final snap;
@@ -25,7 +28,8 @@ class LeafletDescriptionScreen extends StatefulWidget {
       this.picUrl,
       required this.snap,
       required this.distance,
-      required this.reward})
+      required this.reward,
+      required this.policeStation})
       : super(key: key);
 
   @override
@@ -73,23 +77,9 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage("assets/user1.jpg"),
-                    ),
-                    SizedBox(width: Dimensions.width5),
-                    InkWell(
-                      onTap: () {},
-                      child: const Text(
-                        "Username",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
+                SizedBox(
+                    width: Dimensions.screenWidth * 0.5,
+                    child: PoliceInkwell(policeStation: widget.policeStation)),
                 Container(
                   padding: EdgeInsets.only(right: Dimensions.width15),
                   child: Text(
@@ -117,7 +107,20 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                               width: double.infinity,
                               child: Hero(
                                 tag: widget.id + "photo",
-                                child: Image.network(widget.picUrl!),
+                                child: Image.network(
+                                  widget.picUrl!,
+                                  errorBuilder: (context, url, error) =>
+                                      SizedBox(
+                                          width: double.infinity,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(Icons.error),
+                                              Text('Unable to load image')
+                                            ],
+                                          )),
+                                ),
                               ),
                             ),
                           )
