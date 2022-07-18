@@ -25,7 +25,7 @@ class PoliceInkwell extends StatelessWidget {
                     backgroundImage: AssetImage("assets/policelogo.jpg"),
                     backgroundColor: Colors.white,
                   ),
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Column(

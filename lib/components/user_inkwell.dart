@@ -22,7 +22,7 @@ class UserInkwell extends StatelessWidget {
           .copyWith(right: 0),
       child: Row(
         children: [
-          Expanded(
+          Flexible(
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
               child: GestureDetector(
