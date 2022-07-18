@@ -195,9 +195,9 @@ class FireStoreMethods {
       String postId, String? postUrl, BuildContext context) async {
     try {
       // Remove from storage
-      if (postUrl != null) {
-        await FirebaseStorage.instance.refFromURL(postUrl).delete();
-      }
+      // if (postUrl != null) {
+      //   await FirebaseStorage.instance.refFromURL(postUrl).delete();
+      // }
       await _firebaseFirestore.collection('posts').doc(postId).delete();
       showSnackbar("Successfully deleted post", context);
     } catch (err) {
