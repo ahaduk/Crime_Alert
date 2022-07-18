@@ -85,7 +85,7 @@ class PostPreview extends StatelessWidget {
                     )
                   : Container(),
               // text section
-              Expanded(
+              Flexible(
                 child: Container(
                   height: picUrl != null
                       ? Dimensions.listViewImgSize

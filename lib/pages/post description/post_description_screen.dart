@@ -187,11 +187,14 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                                 color: const Color.fromRGBO(255, 255, 255, 1),
                                 child: Column(
                                   children: [
-                                    const Expanded(
+                                    const Flexible(
                                       flex: 1,
-                                      child: Text("Reported Location"),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text("Reported Location"),
+                                      ),
                                     ),
-                                    Expanded(
+                                    Flexible(
                                       flex: 8,
                                       child: Scaffold(
                                         body: GoogleMap(

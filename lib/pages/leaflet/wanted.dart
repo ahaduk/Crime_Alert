@@ -17,7 +17,7 @@ class _WantedState extends State<Wanted> {
       body: Stack(children: [
         Column(
           children: [
-            Expanded(
+            Flexible(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('leaflets')

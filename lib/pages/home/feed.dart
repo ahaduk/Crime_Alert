@@ -71,7 +71,7 @@ class _FeedState extends State<Feed> {
       return Stack(children: [
         Column(
           children: [
-            Expanded(
+            Flexible(
               child: StreamBuilder<List<DocumentSnapshot>>(
                 stream: stream,
                 builder: (context,

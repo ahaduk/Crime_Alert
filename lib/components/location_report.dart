@@ -121,19 +121,22 @@ class _LocationReportState extends State<LocationReport> {
                             const DataLabelSettings(isVisible: true),
                       )
                     ]),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: TextButton(
-                          onPressed: () {
-                            Get.to(() => MoreDetailOnReport(posts: _posts));
-                          },
-                          child: const Text('More Information')),
-                    )
-                  ],
-                ),
+                _posts.isNotEmpty
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: TextButton(
+                                onPressed: () {
+                                  Get.to(
+                                      () => MoreDetailOnReport(posts: _posts));
+                                },
+                                child: const Text('More Information')),
+                          )
+                        ],
+                      )
+                    : Container(),
               ],
             ),
           );

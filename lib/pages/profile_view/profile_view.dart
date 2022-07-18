@@ -54,8 +54,10 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     final FlutterUser _fuser = widget.fuser;
     if (_isLoading && !_locationEnabled) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     } else {
       return Scaffold(
@@ -104,7 +106,8 @@ class _ProfileViewState extends State<ProfileView> {
                         return PostPreview(
                           reportLocation: snapshot.data!.docs[index]
                               ['reportLocation']['geopoint'] as GeoPoint,
-                          currentLocation: _currentLocation,
+                          currentLocation:
+                              _locationEnabled ? _currentLocation : null,
                           snap: snapshot.data!.docs[index],
                           posterUser: _fuser,
                           postDescription: snapshot.data!.docs[index]

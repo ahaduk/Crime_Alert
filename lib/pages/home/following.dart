@@ -70,7 +70,7 @@ class _FollowingState extends State<Following> {
                       textAlign: TextAlign.center,
                     ),
                   )
-                : Expanded(
+                : Flexible(
                     child: _isLoading
                         ? const Center(
                             child: CircularProgressIndicator(),

@@ -41,7 +41,7 @@ class _HomeFeedState extends State<HomeFeed> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: [
+    return Stack(children: [
       Column(children: [
         Container(
           margin: EdgeInsets.only(

@@ -44,7 +44,8 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
   @override
   Widget build(BuildContext context) {
     //User only upvotes and downvotes if signed in
-    return FirebaseAuth.instance.currentUser != null
+    return FirebaseAuth.instance.currentUser != null &&
+            widget.snap['uid'] != FirebaseAuth.instance.currentUser!.uid
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

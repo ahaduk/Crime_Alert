@@ -210,11 +210,14 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                                         const Color.fromRGBO(255, 255, 255, 1),
                                     child: Column(
                                       children: [
-                                        const Expanded(
+                                        const Flexible(
                                           flex: 1,
-                                          child: Text("Last seen location"),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: Text("Last seen location"),
+                                          ),
                                         ),
-                                        Expanded(
+                                        Flexible(
                                           flex: 8,
                                           child: Scaffold(
                                             body: GoogleMap(
