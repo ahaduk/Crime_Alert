@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:async';
-import 'package:crime_alert/components/user_profile_avatar.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
 import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/utils.dart';
@@ -114,33 +113,25 @@ class _PostAlertPageState extends State<PostAlertPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const UserProfileAvatar(),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        child: TextField(
-                            decoration: const InputDecoration(
-                              focusColor: Colors.black,
-                              hintText: 'Write a caption...',
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.black),
-                                gapPadding: 10,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                                gapPadding: 10,
-                              ),
-                            ),
-                            controller: _descriptionController,
-                            maxLength: 200,
-                            maxLines: 5),
-                      ),
-                    ],
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: TextField(
+                        decoration: const InputDecoration(
+                          focusColor: Colors.black,
+                          hintText: 'Write a caption...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(color: Colors.black),
+                            gapPadding: 10,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                            gapPadding: 10,
+                          ),
+                        ),
+                        controller: _descriptionController,
+                        maxLength: 200,
+                        maxLines: 5),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -245,11 +236,14 @@ class _PostAlertPageState extends State<PostAlertPage> {
               color: const Color.fromRGBO(255, 255, 255, 1),
               child: Column(
                 children: [
-                  const Expanded(
+                  const Flexible(
                     flex: 1,
-                    child: Text("Tap to choose location"),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Tap to choose location"),
+                    ),
                   ),
-                  Expanded(
+                  Flexible(
                     flex: 8,
                     child: Scaffold(
                       body: GoogleMap(

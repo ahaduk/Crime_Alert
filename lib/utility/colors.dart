@@ -10,6 +10,7 @@ class AppColors {
   }
 
   static Color primaryColor = Colors.blue.shade800;
+  static const Color paracolor = Color(0x6F6F6F6F);
   static const Color textColor = Color.fromARGB(255, 115, 115, 115);
   static const Color mainColor = Color(0xF6F6BE00);
   static const Color background = Color.fromARGB(255, 227, 229, 231);

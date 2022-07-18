@@ -39,6 +39,7 @@ class _PoliceProfileState extends State<PoliceProfile> {
       appBar: AppBar(
         backgroundColor: AppColors.mainColor,
         title: const Text('Station Profile'),
+        foregroundColor: Colors.black,
         centerTitle: true,
       ),
       body: Container(

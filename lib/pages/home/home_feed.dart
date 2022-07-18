@@ -87,7 +87,7 @@ class _HomeFeedState extends State<HomeFeed> {
             ],
           ),
         ),
-        Expanded(
+        Flexible(
             child: PageView(
           onPageChanged: (int page) {
             setState(() {

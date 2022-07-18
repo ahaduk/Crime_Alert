@@ -86,7 +86,7 @@ class _LeafletFeedState extends State<LeafletFeed> {
             ],
           ),
         ),
-        Expanded(
+        Flexible(
             child: PageView(
           onPageChanged: (int page) {
             setState(() {

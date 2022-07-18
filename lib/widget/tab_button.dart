@@ -33,9 +33,8 @@ class NavTabs extends StatelessWidget {
         child: BigText(
           text: text,
           size: screenHeight <= 825 ? 16 : Dimensions.font20,
-          color: selectedPage == pageNumber
-              ? const Color.fromARGB(255, 2, 2, 2)
-              : const Color.fromARGB(255, 167, 166, 166),
+          fontWeight:
+              selectedPage == pageNumber ? FontWeight.w700 : FontWeight.w300,
         ),
       ),
     );
