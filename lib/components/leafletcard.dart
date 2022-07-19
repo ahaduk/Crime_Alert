@@ -150,7 +150,6 @@ class LeafletCardState extends State<LeafletCard> {
                         timeago.format(dateTimeOfPost),
                         style: const TextStyle(
                           color: Color.fromARGB(255, 111, 111, 111),
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),

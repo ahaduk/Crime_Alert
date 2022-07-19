@@ -1,5 +1,6 @@
 import 'package:crime_alert/components/post_card_from_object.dart';
 import 'package:crime_alert/model/post_model.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
 
 class MoreDetailOnReport extends StatelessWidget {
@@ -10,8 +11,9 @@ class MoreDetailOnReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('More Information'),
-        backgroundColor: Colors.white,
+        title: const Text('Recent alerts in location'),
+        foregroundColor: Colors.black,
+        backgroundColor: AppColors.mainColor,
       ),
       body: ListView.builder(
           itemCount: posts.length,

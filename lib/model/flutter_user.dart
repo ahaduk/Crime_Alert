@@ -38,7 +38,10 @@ class FlutterUser {
         "following": following,
         "lastKnownLocation": lastKnownLocation
       };
-  static FlutterUser fromSnap(DocumentSnapshot snap) {
+  static FlutterUser? fromSnap(DocumentSnapshot snap) {
+    if (!snap.exists) {
+      return null;
+    }
     var snapShot = snap.data() as Map<String, dynamic>;
     return FlutterUser(
         uid: snapShot['uid'],

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Future<model.FlutterUser> getUserDetails() async {
+  Future<model.FlutterUser?> getUserDetails() async {
     User? currentUser = _auth.currentUser;
     DocumentSnapshot snap =
         await _firestore.collection('users').doc(currentUser?.uid).get();

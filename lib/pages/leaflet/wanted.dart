@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/leafletcard.dart';
+import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Wanted extends StatefulWidget {
   const Wanted({Key? key}) : super(key: key);
@@ -10,6 +13,27 @@ class Wanted extends StatefulWidget {
 }
 
 class _WantedState extends State<Wanted> {
+  Position? _currentLocation;
+  final geo = Geoflutterfire();
+  void getLocation() async {
+    try {
+      _currentLocation = await determinePosition();
+    } catch (e) {
+      try {
+        _currentLocation = (await Geolocator.getLastKnownPosition())!;
+        showSnackbar("Using last known location to load feed", context);
+      } catch (e) {
+        showSnackbar("Please enable location services.", context);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    getLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +70,7 @@ class _WantedState extends State<Wanted> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return LeafletCard(
+                          currentLocation: _currentLocation,
                           snap: snapshot.data!.docs[index].data(),
                           docId:
                               snapshot.data!.docs[index].reference.id + "wa");

@@ -39,7 +39,7 @@ class _FollowingState extends State<Following> {
   }
 
   Future<void> getUser() async {
-    FlutterUser fuser = await AuthMethods().getUserDetails();
+    FlutterUser? fuser = await AuthMethods().getUserDetails();
     setState(() {
       _fuser = fuser;
       _isLoading = false;

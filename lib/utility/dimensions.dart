@@ -35,5 +35,5 @@ class Dimensions {
   static double radius30 = screenHeight / 28.2;
 
 //list view size
-  static double listViewImgSize = screenWidth / 3.24;
+  static double listViewImgSize = screenWidth / 3;
 }

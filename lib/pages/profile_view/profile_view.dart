@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crime_alert/components/post_preview_card.dart';
+import 'package:crime_alert/components/user_posts.dart';
 import 'package:crime_alert/components/user_profile_card.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/utility/dimensions.dart';
@@ -84,44 +83,10 @@ class _ProfileViewState extends State<ProfileView> {
                         fontSize: Dimensions.font14),
                   ),
                 ),
-                FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('posts')
-                      .where('uid', isEqualTo: _fuser.uid)
-                      .orderBy('datePublished', descending: true)
-                      .get(),
-                  builder: (context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return PostPreview(
-                          reportLocation: snapshot.data!.docs[index]
-                              ['reportLocation']['geopoint'] as GeoPoint,
-                          currentLocation:
-                              _locationEnabled ? _currentLocation : null,
-                          snap: snapshot.data!.docs[index],
-                          posterUser: _fuser,
-                          postDescription: snapshot.data!.docs[index]
-                              ['description'],
-                          id: snapshot.data!.docs[index].id,
-                          picUrl: snapshot.data!.docs[index]['imgUrl'],
-                          dateTimeOfPost: (snapshot.data!.docs[index]
-                                  ['datePublished'] as Timestamp)
-                              .toDate(),
-                        );
-                      },
-                    );
-                  },
-                ),
+                UserPosts(
+                    userId: _fuser.uid,
+                    locationEnabled: _locationEnabled,
+                    currentLocation: _currentLocation),
               ],
             ),
           ),

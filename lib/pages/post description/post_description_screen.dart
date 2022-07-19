@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/upvote_downvote.dart';
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/model/police_station.dart';
+import 'package:crime_alert/pages/police_profile/police_profile.dart';
 import 'package:crime_alert/pages/profile_view/profile_view.dart';
 import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,8 @@ class PostDescriptionScreen extends StatefulWidget {
   final String? picUrl;
   final String postDescription, id;
   final double distance;
-  final FlutterUser posterUser;
+  final FlutterUser? posterUser;
+  final PoliceStation? policeStation;
   // ignore: prefer_typing_uninitialized_variables
   final snap;
 
@@ -29,7 +32,8 @@ class PostDescriptionScreen extends StatefulWidget {
       this.picUrl,
       required this.snap,
       required this.distance,
-      required this.posterUser})
+      this.posterUser,
+      this.policeStation})
       : super(key: key);
 
   @override
@@ -76,39 +80,11 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    widget.posterUser.photoUrl != null
-                        ? CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage:
-                                NetworkImage(widget.posterUser.photoUrl!),
-                            radius: 20,
-                          )
-                        : const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage("assets/profile.png"),
-                            radius: 20,
-                          ),
-                    SizedBox(width: Dimensions.width5),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => ProfileView(fuser: widget.posterUser));
-                      },
-                      child: widget.posterUser.fullName != null
-                          ? Text(
-                              widget.posterUser.fullName!,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          : const Text(
-                              "Unkown User",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                    ),
-                  ],
-                ),
+                widget.posterUser != null
+                    ? buildUserInkwell()
+                    : widget.policeStation != null
+                        ? buildPoliceInkwell()
+                        : Container(),
                 Container(
                   padding: EdgeInsets.only(right: Dimensions.width15),
                   child: Text(
@@ -234,6 +210,69 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Row buildUserInkwell() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        widget.posterUser!.photoUrl != null
+            ? CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: NetworkImage(widget.posterUser!.photoUrl!),
+                radius: 20,
+              )
+            : const CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage("assets/profile.png"),
+                radius: 20,
+              ),
+        SizedBox(width: Dimensions.width5),
+        InkWell(
+          onTap: () {
+            Get.to(() => ProfileView(fuser: widget.posterUser!));
+          },
+          child: widget.posterUser!.fullName != null
+              ? Text(
+                  widget.posterUser!.fullName!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )
+              : const Text(
+                  "Unkown User",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+        ),
+      ],
+    );
+  }
+
+  Row buildPoliceInkwell() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        widget.policeStation!.photoUrl != null
+            ? CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: NetworkImage(widget.policeStation!.photoUrl!),
+                radius: 20,
+              )
+            : const CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage("assets/policelogo.jpg"),
+                radius: 20,
+              ),
+        SizedBox(width: Dimensions.width5),
+        InkWell(
+          onTap: () {
+            Get.to(() => PoliceProfile(policeStation: widget.policeStation!));
+          },
+          child: Text(
+            'Station: ' + widget.policeStation!.stationCode,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
     );
   }
 }

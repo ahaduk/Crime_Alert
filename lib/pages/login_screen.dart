@@ -40,12 +40,15 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(top: 30),
               child: SizedBox(
                   width: double.infinity,
-                  child: Text(
-                    "Please use the link to verify you are not a robot",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: Dimensions.font16,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      "Please use the link to verify you are not a robot",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: Dimensions.font16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   )),
             ),

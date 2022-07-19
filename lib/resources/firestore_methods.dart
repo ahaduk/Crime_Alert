@@ -5,7 +5,6 @@ import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/resources/storage_methods.dart';
 import 'package:crime_alert/utility/utils.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,7 +15,7 @@ class FireStoreMethods {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final geo = Geoflutterfire();
   //To get any user details
-  Future<FlutterUser> getUserDetails(String uid) async {
+  Future<FlutterUser?> getUserDetails(String uid) async {
     DocumentSnapshot snap =
         await _firebaseFirestore.collection('users').doc(uid).get();
     return FlutterUser.fromSnap(snap);

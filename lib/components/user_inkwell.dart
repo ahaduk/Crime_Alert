@@ -9,10 +9,10 @@ import 'package:get/get.dart';
 
 class UserInkwell extends StatelessWidget {
   final FlutterUser posterUser;
-  final String postId;
+  final String? postId;
   final String? postUrl;
   const UserInkwell(
-      {Key? key, required this.posterUser, required this.postId, this.postUrl})
+      {Key? key, required this.posterUser, this.postId, this.postUrl})
       : super(key: key);
 
   @override
@@ -29,40 +29,45 @@ class UserInkwell extends StatelessWidget {
                 onTap: () {
                   Get.to(() => ProfileView(fuser: posterUser));
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    posterUser.photoUrl != null
-                        ? CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(posterUser.photoUrl!),
-                          )
-                        : const CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage("assets/profile.png"),
-                            backgroundColor: Colors.white,
-                          ),
-                    const SizedBox(width: 10),
-                    InkWell(
-                      child: posterUser.fullName != null
-                          ? Text(
-                              posterUser.fullName!,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      posterUser.photoUrl != null
+                          ? CircleAvatar(
+                              radius: 20,
+                              backgroundImage:
+                                  NetworkImage(posterUser.photoUrl!),
                             )
-                          : const Text(
-                              "Unknown User",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          : const CircleAvatar(
+                              radius: 20,
+                              backgroundImage: AssetImage("assets/profile.png"),
+                              backgroundColor: Colors.white,
                             ),
-                    ),
-                  ],
+                      const SizedBox(width: 10),
+                      InkWell(
+                        child: posterUser.fullName != null
+                            ? Text(
+                                posterUser.fullName!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              )
+                            : const Text(
+                                "Unknown User",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
           FirebaseAuth.instance.currentUser != null &&
-                  FirebaseAuth.instance.currentUser!.uid == posterUser.uid
+                  FirebaseAuth.instance.currentUser!.uid == posterUser.uid &&
+                  postId != null
               ? IconButton(
                   onPressed: () async {
                     await buildOptions(context);
@@ -116,35 +121,38 @@ class UserInkwell extends StatelessWidget {
                                                 MaterialStateProperty.all(
                                                     AppColors.iconColor3)),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          //Continue to delete post
-                                          Navigator.of(context).pop();
-                                          await FireStoreMethods().deletePost(
-                                              postId.substring(
-                                                  0, postId.length - 2),
-                                              postUrl,
-                                              context);
-                                        },
-                                        child: const Text('Delete'),
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            3),
-                                                    side: const BorderSide(
-                                                        color: Colors.black))),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            shadowColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(Colors.black)),
-                                      ),
+                                      postId != null
+                                          ? ElevatedButton(
+                                              onPressed: () async {
+                                                //Continue to delete post
+                                                Navigator.of(context).pop();
+                                                await FireStoreMethods()
+                                                    .deletePost(
+                                                        postId!.substring(0,
+                                                            postId!.length - 2),
+                                                        postUrl,
+                                                        context);
+                                              },
+                                              child: const Text('Delete'),
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(3),
+                                                          side: const BorderSide(
+                                                              color: Colors
+                                                                  .black))),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.transparent),
+                                                  shadowColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.transparent),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all(Colors.black)),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
                                 ],

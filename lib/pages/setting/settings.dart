@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> getUser() async {
-    FlutterUser fuser = await AuthMethods().getUserDetails();
+    FlutterUser? fuser = await AuthMethods().getUserDetails();
     setState(() {
       _fuser = fuser;
       _toggled = _fuser!.keepMeAlert;
@@ -91,27 +91,27 @@ class _SettingsPageState extends State<SettingsPage> {
                         ? KeepMeAlert(toggled: _toggled)
                         : Container(),
                     //Need to be signed to bookmark
-                    _fuser != null
-                        ? ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            leading: const Icon(
-                              Icons.bookmark,
-                              size: 26,
-                              color: AppColors.iconColor1,
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 18,
-                              color: AppColors.iconColor2,
-                            ),
-                            title: BigText(
-                              text: "Bookmarks",
-                              size: Dimensions.font16,
-                              color: AppColors.textColor,
-                            ),
-                            onTap: () {},
-                          )
-                        : Container(),
+                    // _fuser != null
+                    //     ? ListTile(
+                    //         contentPadding: const EdgeInsets.all(0),
+                    //         leading: const Icon(
+                    //           Icons.bookmark,
+                    //           size: 26,
+                    //           color: AppColors.iconColor1,
+                    //         ),
+                    //         trailing: const Icon(
+                    //           Icons.arrow_forward_ios,
+                    //           size: 18,
+                    //           color: AppColors.iconColor2,
+                    //         ),
+                    //         title: BigText(
+                    //           text: "Bookmarks",
+                    //           size: Dimensions.font16,
+                    //           color: AppColors.textColor,
+                    //         ),
+                    //         onTap: () {},
+                    //       )
+                    //     : Container(),
                     //  User Agreement
                     ListTile(
                       contentPadding: const EdgeInsets.all(0),

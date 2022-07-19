@@ -16,36 +16,44 @@ class UpvoteDownvote extends StatefulWidget {
 
 class _UpvoteDownvoteState extends State<UpvoteDownvote> {
   Future<void> _toggleUpVote() async {
-    String? res = await FireStoreMethods().upvote(
-        //to tell if it is from followers, feed, missing wanted as the IDs need to be unique
-        //Removing last two characters as the id comes appended from post
-        widget.postId.substring(0, widget.postId.length - 2),
-        FirebaseAuth.instance.currentUser!.uid,
-        widget.snap['uid'],
-        widget.snap['upvotes'],
-        widget.snap['downvotes']);
-    if (res != null) {
-      showSnackbar(res, context);
+    //Allow vote if not own post
+    if (widget.snap['uid'] != FirebaseAuth.instance.currentUser!.uid) {
+      String? res = await FireStoreMethods().upvote(
+          //to tell if it is from followers, feed, missing wanted as the IDs need to be unique
+          //Removing last two characters as the id comes appended from post
+          widget.postId.substring(0, widget.postId.length - 2),
+          FirebaseAuth.instance.currentUser!.uid,
+          widget.snap['uid'],
+          widget.snap['upvotes'],
+          widget.snap['downvotes']);
+      if (res != null) {
+        showSnackbar(res, context);
+      }
+    } else {
+      showSnackbar('You can not vote on your own post', context);
     }
   }
 
   void _toggleDownvote() async {
-    String? res = await FireStoreMethods().downvote(
-        widget.postId.substring(0, widget.postId.length - 2),
-        FirebaseAuth.instance.currentUser!.uid,
-        widget.snap['uid'],
-        widget.snap['upvotes'],
-        widget.snap['downvotes']);
-    if (res != null) {
-      showSnackbar(res, context);
+    if (widget.snap['uid'] != FirebaseAuth.instance.currentUser!.uid) {
+      String? res = await FireStoreMethods().downvote(
+          widget.postId.substring(0, widget.postId.length - 2),
+          FirebaseAuth.instance.currentUser!.uid,
+          widget.snap['uid'],
+          widget.snap['upvotes'],
+          widget.snap['downvotes']);
+      if (res != null) {
+        showSnackbar(res, context);
+      }
+    } else {
+      showSnackbar('You can not vote on your own post', context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     //User only upvotes and downvotes if signed in
-    return FirebaseAuth.instance.currentUser != null &&
-            widget.snap['uid'] != FirebaseAuth.instance.currentUser!.uid
+    return FirebaseAuth.instance.currentUser != null
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -60,7 +68,11 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
                           ? Icons.thumb_down_alt_rounded
                           : Icons.thumb_down_off_alt_outlined,
                       //Icons.thumb_down_off_alt_outlined,  when downvoted
-                      color: Colors.red,
+                      color: widget.snap.containsKey('downvotes') &&
+                              widget.snap['downvotes'].contains(
+                                  FirebaseAuth.instance.currentUser!.uid)
+                          ? Colors.red
+                          : Colors.black,
                       size: 20,
                     ),
                   ),
@@ -81,7 +93,11 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
                                   FirebaseAuth.instance.currentUser!.uid)
                           ? Icons.thumb_up_off_alt_rounded
                           : Icons.thumb_up_off_alt_outlined,
-                      color: Colors.blue,
+                      color: widget.snap.containsKey('upvotes') &&
+                              widget.snap['upvotes'].contains(
+                                  FirebaseAuth.instance.currentUser!.uid)
+                          ? const Color.fromARGB(255, 246, 189, 0)
+                          : Colors.black,
                       size: 20,
                     ),
                   ),

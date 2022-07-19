@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/Skeleton.dart';
+import 'package:crime_alert/components/police_inkwell.dart';
 import 'package:crime_alert/components/user_inkwell.dart';
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/model/post_model.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:crime_alert/widget/big_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -21,12 +24,26 @@ class PostCardFromList extends StatefulWidget {
 }
 
 class _PostCardFromListState extends State<PostCardFromList> {
-  late final FlutterUser _posterUser;
+  FlutterUser? _posterUser;
   Position? _currentLocation;
-  bool _userSet = false;
+  bool _userSet = false, _policeSet = false;
+  late final PoliceStation _policeStation;
+  getPoliceStation() async {
+    _policeStation = await FireStoreMethods().getPoliceInfo(widget.post.uid);
+    if (super.mounted) {
+      setState(() {
+        _policeSet = true;
+      });
+    }
+  }
+
   //Also pass a user object or user id to identify profile of poster
   getPoster() async {
     _posterUser = await FireStoreMethods().getUserDetails(widget.post.uid);
+    if (_posterUser == null) {
+      //If post is not from agent it is from police station
+      await getPoliceStation();
+    }
     if (super.mounted) {
       setState(() {
         _userSet = true;
@@ -67,28 +84,14 @@ class _PostCardFromListState extends State<PostCardFromList> {
             reportLocation.longitude)
         : 0;
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-      margin: const EdgeInsets.only(bottom: 4),
+      decoration: Constants.cardBoxDecoration
+          .copyWith(border: Border.all(color: Colors.grey)),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
-          _userSet
-              ? UserInkwell(
-                  posterUser: _posterUser,
-                  postId: widget.post.description,
-                  postUrl: widget.post.imgUrl,
-                )
-              //Show skeleton during user data fetch
-              : Padding(
-                  padding: const EdgeInsets.only(left: 25, bottom: 10),
-                  child: Row(
-                    children: const [
-                      Skeleton(height: 40, width: 40),
-                      SizedBox(width: 10),
-                      Skeleton(width: 120),
-                    ],
-                  ),
-                ),
+          buildConditionalInkwell(),
+          const SizedBox(height: 5),
           widget.post.imgUrl != null
               ? Hero(
                   tag: widget.post.imgUrl.toString() + "photo",
@@ -153,6 +156,28 @@ class _PostCardFromListState extends State<PostCardFromList> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildConditionalInkwell() {
+    if (_userSet && _posterUser != null) {
+      return UserInkwell(
+        posterUser: _posterUser!,
+        postUrl: widget.post.imgUrl,
+      );
+    } else if (_policeSet) {
+      return PoliceInkwell(policeStation: _policeStation);
+    }
+    //Show skeleton during user data fetch
+    return Padding(
+      padding: const EdgeInsets.only(left: 25, bottom: 10),
+      child: Row(
+        children: const [
+          Skeleton(height: 40, width: 40),
+          SizedBox(width: 10),
+          Skeleton(width: 120),
         ],
       ),
     );

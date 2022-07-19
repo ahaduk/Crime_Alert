@@ -1,7 +1,9 @@
 import 'package:crime_alert/components/default_button.dart';
+import 'package:crime_alert/pages/login_screen.dart';
 import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/dimensions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'otp_form.dart';
 
@@ -50,7 +52,12 @@ class _OtpBodyState extends State<OtpBody> {
               SizedBox(height: Dimensions.height20),
               showForm
                   ? OtpForm(verificationId: widget.verificationId)
-                  : DefaultButton(press: () {}, text: "Resend OTP"),
+                  : DefaultButton(
+                      press: () {
+                        Get.back();
+                        Get.to(() => const LoginScreen());
+                      },
+                      text: "Resend OTP"),
             ],
           ),
         ),

@@ -50,7 +50,7 @@ class _UserProfileCardState extends State<UserProfileCard> {
             ),
           );
         }
-        final FlutterUser _fuser = FlutterUser.fromSnap(snapshot.data!);
+        final FlutterUser? _fuser = FlutterUser.fromSnap(snapshot.data!);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,7 +64,8 @@ class _UserProfileCardState extends State<UserProfileCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BigText(
-                  text: _fuser.fullName != null ? _fuser.fullName! : "Civilian",
+                  text:
+                      _fuser!.fullName != null ? _fuser.fullName! : "Civilian",
                   size: Dimensions.font26,
                   color: AppColors.textColor,
                   overflow: TextOverflow.fade,

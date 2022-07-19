@@ -18,7 +18,7 @@ class _UserProfileAvatarState extends State<UserProfileAvatar> {
   FlutterUser? _fuser;
   Future<void> getUser() async {
     try {
-      FlutterUser fuser = await AuthMethods().getUserDetails();
+      FlutterUser? fuser = await AuthMethods().getUserDetails();
       setState(() {
         _fuser = fuser;
       });
