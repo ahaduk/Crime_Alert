@@ -11,9 +11,9 @@ class MoreDetailOnReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recent alerts in location'),
-        foregroundColor: Colors.black,
         backgroundColor: AppColors.mainColor,
+        title: const Text('Alerts In Location', style: TextStyle(fontSize: 15)),
+        foregroundColor: Colors.black,
       ),
       body: ListView.builder(
           itemCount: posts.length,

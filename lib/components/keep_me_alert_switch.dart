@@ -37,7 +37,7 @@ class _KeepMeAlertState extends State<KeepMeAlert> {
         ),
         value: _toggled,
         onChanged: (bool value) async {
-          if (await Geolocator.isLocationServiceEnabled()) {
+          if (await Geolocator.isLocationServiceEnabled() || value == false) {
             String res = await FireStoreMethods().toggleKeepMeAlert(
                 FirebaseAuth.instance.currentUser!.uid, value);
             showSnackbar(res, context);
