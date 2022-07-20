@@ -77,7 +77,8 @@ class _PoliceProfileState extends State<PoliceProfile> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.mainColor,
-          title: const Text('Station Profile'),
+          title: const Text('Police Station Profile',
+              style: TextStyle(fontSize: 15)),
           foregroundColor: Colors.black,
           centerTitle: true,
         ),
