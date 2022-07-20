@@ -126,7 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         color: AppColors.iconColor2,
                       ),
                       title: BigText(
-                        text: "User Agreement",
+                        text: "Privacy Policy",
                         size: Dimensions.font16,
                         color: AppColors.textColor,
                       ),

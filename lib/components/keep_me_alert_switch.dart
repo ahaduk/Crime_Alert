@@ -5,6 +5,7 @@ import 'package:crime_alert/utility/utils.dart';
 import 'package:crime_alert/widget/big_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class KeepMeAlert extends StatefulWidget {
   final bool toggled;
@@ -36,13 +37,18 @@ class _KeepMeAlertState extends State<KeepMeAlert> {
         ),
         value: _toggled,
         onChanged: (bool value) async {
-          String res = await FireStoreMethods()
-              .toggleKeepMeAlert(FirebaseAuth.instance.currentUser!.uid, value);
-          showSnackbar(res, context);
-          setState(() {
-            _toggled = value;
-            stateSet = true;
-          });
+          if (await Geolocator.isLocationServiceEnabled()) {
+            String res = await FireStoreMethods().toggleKeepMeAlert(
+                FirebaseAuth.instance.currentUser!.uid, value);
+            showSnackbar(res, context);
+            setState(() {
+              _toggled = value;
+              stateSet = true;
+            });
+          } else {
+            showSnackbar(
+                'You need to enable your location to stay alert', context);
+          }
         });
   }
 }

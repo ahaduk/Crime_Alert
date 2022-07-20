@@ -12,6 +12,7 @@ import '../utility/dimensions.dart';
 import '../widget/big_text.dart';
 
 class PostPreview extends StatelessWidget {
+  final bool locationEnabled;
   final String? picUrl;
   final String postDescription, id;
   final DateTime dateTimeOfPost;
@@ -29,14 +30,15 @@ class PostPreview extends StatelessWidget {
       required this.userId,
       required this.snap,
       this.currentLocation,
-      required this.reportLocation})
+      required this.reportLocation,
+      required this.locationEnabled})
       : super(key: key);
   //Also pass a user object or user id to identify profile of poster
   @override
   Widget build(BuildContext context) {
     double screenHeight = Get.context!.height;
     double distance = 0;
-    currentLocation != null
+    locationEnabled
         ? distance = calculateDistance(
             currentLocation!.latitude,
             currentLocation!.longitude,
@@ -143,7 +145,9 @@ class PostPreview extends StatelessWidget {
                               width: double.infinity,
                               padding: const EdgeInsets.only(bottom: 10),
                               child: Text(
-                                distance.toStringAsFixed(2) + "KM away",
+                                distance != 0
+                                    ? distance.toStringAsFixed(2) + "KM away"
+                                    : "Unknown KM away",
                                 textAlign: TextAlign.end,
                                 style: TextStyle(fontSize: Dimensions.font13),
                               ),

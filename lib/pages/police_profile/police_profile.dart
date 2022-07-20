@@ -25,7 +25,7 @@ class PoliceProfile extends StatefulWidget {
 
 class _PoliceProfileState extends State<PoliceProfile> {
   late BitmapDescriptor customMapMarker;
-  late Position _currentLocation;
+  Position? _currentLocation;
   final Completer<GoogleMapController> _googleMapController = Completer();
   void setCustomMarker() async {
     customMapMarker = await BitmapDescriptor.fromAssetImage(

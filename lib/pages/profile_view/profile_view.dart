@@ -16,7 +16,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  late Position _currentLocation;
+  Position? _currentLocation;
   bool _locationEnabled = false, _isLoading = true;
   final geo = Geoflutterfire();
   void getLocation() async {

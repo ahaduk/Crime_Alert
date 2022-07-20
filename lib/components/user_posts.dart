@@ -8,7 +8,7 @@ class UserPosts extends StatelessWidget {
     Key? key,
     required String userId,
     required bool locationEnabled,
-    required Position currentLocation,
+    Position? currentLocation,
   })  : _userId = userId,
         _locationEnabled = locationEnabled,
         _currentLocation = currentLocation,
@@ -16,7 +16,7 @@ class UserPosts extends StatelessWidget {
 
   final String _userId;
   final bool _locationEnabled;
-  final Position _currentLocation;
+  final Position? _currentLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,7 @@ class UserPosts extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             return PostPreview(
+              locationEnabled: _locationEnabled,
               reportLocation: snapshot.data!.docs[index]['reportLocation']
                   ['geopoint'] as GeoPoint,
               currentLocation: _locationEnabled ? _currentLocation : null,
