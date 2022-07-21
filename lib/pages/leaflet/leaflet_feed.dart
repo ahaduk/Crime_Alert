@@ -1,5 +1,6 @@
 import 'package:crime_alert/pages/leaflet/missing.dart';
 import 'package:crime_alert/pages/leaflet/wanted.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/user_profile_avatar.dart';
@@ -40,63 +41,60 @@ class _LeafletFeedState extends State<LeafletFeed> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: [
-      Column(children: [
-        Container(
-          margin: EdgeInsets.only(
-              top: Dimensions.height45, bottom: Dimensions.width10),
-          padding: EdgeInsets.only(right: Dimensions.width20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 40,
-                width: 100,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/screenlogo.png'),
-                        fit: BoxFit.cover)),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  NavTabs(
-                    text: "Wanted",
-                    pageNumber: 0,
-                    selectedPage: _selectedPage,
-                    onPressed: () {
-                      _changePage(0);
-                    },
-                  ),
-                  BigText(
-                    text: "|",
-                    size: Dimensions.font14,
-                  ),
-                  NavTabs(
-                    text: "Missing   ",
-                    pageNumber: 1,
-                    selectedPage: _selectedPage,
-                    onPressed: () {
-                      _changePage(1);
-                    },
-                  ),
-                ],
-              ),
-              const Center(child: UserProfileAvatar())
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.mainColor,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 40,
+              width: 100,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/screenlogo.png'),
+                      fit: BoxFit.cover)),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                NavTabs(
+                  text: "Wanted",
+                  pageNumber: 0,
+                  selectedPage: _selectedPage,
+                  onPressed: () {
+                    _changePage(0);
+                  },
+                ),
+                BigText(
+                  text: "|",
+                  size: Dimensions.font14,
+                ),
+                NavTabs(
+                  text: "Missing   ",
+                  pageNumber: 1,
+                  selectedPage: _selectedPage,
+                  onPressed: () {
+                    _changePage(1);
+                  },
+                ),
+              ],
+            ),
+            const Center(child: UserProfileAvatar())
+          ],
         ),
-        Flexible(
-            child: PageView(
-          onPageChanged: (int page) {
-            setState(() {
-              _selectedPage = page;
-            });
-          },
-          controller: _pageController,
-          children: const [Wanted(), Missing()],
-        ))
-      ]),
-    ]);
+      ),
+      body: PageView(
+        onPageChanged: (int page) {
+          setState(() {
+            _selectedPage = page;
+          });
+        },
+        controller: _pageController,
+        children: const [Wanted(), Missing()],
+      ),
+    );
   }
 }
