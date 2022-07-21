@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.iconColor2,
+        backgroundColor: AppColors.mainColor,
         elevation: 0,
         title: Text(
           codeSent ? "Verify Phone Number" : "Sign In With Phone Number",

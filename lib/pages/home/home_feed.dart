@@ -52,7 +52,7 @@ class _HomeFeedState extends State<HomeFeed> {
           children: [
             Container(
               height: 40,
-              width: 100,
+              width: Dimensions.screenWidth > 361.1618200094481 ? 100 : 80,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/screenlogo.png'),
@@ -83,7 +83,7 @@ class _HomeFeedState extends State<HomeFeed> {
                 ),
               ],
             ),
-            const Center(child: UserProfileAvatar())
+            const UserProfileAvatar()
           ],
         ),
       ),

@@ -58,13 +58,13 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
         (widget.snap['datePublished'] as Timestamp).toDate();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.iconColor2,
+        backgroundColor: AppColors.mainColor,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Leaflet Description",
           style: TextStyle(
             color: Colors.black,
-            fontSize: Dimensions.font16,
+            fontSize: 15,
           ),
         ),
         centerTitle: true,
@@ -185,6 +185,13 @@ class _LeafletDescriptionScreenState extends State<LeafletDescriptionScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  AppColors.mainColor),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              foregroundColor:
+                                  MaterialStateProperty.all(Colors.black)),
                           onPressed: () {
                             GeoPoint reportLocation =
                                 (widget.snap['reportLocation'] as GeoPoint);

@@ -282,70 +282,81 @@ class _PoliceProfileState extends State<PoliceProfile> {
                     )
                   : Container(),
               //Show Station location on map
-              TextButton(
-                  onPressed: () {
-                    GeoPoint reportLocation = GeoPoint(
-                        widget.policeStation.latitude,
-                        widget.policeStation.longitude);
-                    Marker _reportLocation = Marker(
-                        position: LatLng(
-                            reportLocation.latitude, reportLocation.longitude),
-                        markerId: const MarkerId("reportLocation"),
-                        icon: customMapMarker);
-                    CameraPosition _initialCameraPosition = CameraPosition(
-                      //Setting default camera position
-                      target: LatLng(_reportLocation.position.latitude,
-                          _reportLocation.position.longitude),
-                      zoom: 15,
-                    );
-                    showModalBottomSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            color: const Color.fromRGBO(255, 255, 255, 1),
-                            child: Column(
-                              children: [
-                                const Flexible(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text("Police Station Location"),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 8,
-                                  child: Scaffold(
-                                    body: GoogleMap(
-                                      myLocationEnabled: true,
-                                      myLocationButtonEnabled: true,
-                                      mapToolbarEnabled: false,
-                                      markers: {_reportLocation},
-                                      zoomControlsEnabled: false,
-                                      initialCameraPosition:
-                                          _initialCameraPosition,
-                                      onMapCreated:
-                                          (GoogleMapController controller) {
-                                        if (!_googleMapController.isCompleted) {
-                                          _googleMapController
-                                              .complete(controller);
-                                        }
-                                      },
+              SizedBox(
+                width: 280,
+                child: TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(AppColors.mainColor),
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.black)),
+                    onPressed: () {
+                      GeoPoint reportLocation = GeoPoint(
+                          widget.policeStation.latitude,
+                          widget.policeStation.longitude);
+                      Marker _reportLocation = Marker(
+                          position: LatLng(reportLocation.latitude,
+                              reportLocation.longitude),
+                          markerId: const MarkerId("reportLocation"),
+                          icon: customMapMarker);
+                      CameraPosition _initialCameraPosition = CameraPosition(
+                        //Setting default camera position
+                        target: LatLng(_reportLocation.position.latitude,
+                            _reportLocation.position.longitude),
+                        zoom: 15,
+                      );
+                      showModalBottomSheet(
+                          enableDrag: false,
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              padding: const EdgeInsets.all(8),
+                              color: const Color.fromRGBO(255, 255, 255, 1),
+                              child: Column(
+                                children: [
+                                  const Flexible(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text("Police Station Location"),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                  child: Row(
-                    children: const [
-                      Icon(Icons.map),
-                      Text("Show Police Station Location"),
-                    ],
-                  )),
+                                  Flexible(
+                                    flex: 8,
+                                    child: Scaffold(
+                                      body: GoogleMap(
+                                        myLocationEnabled: true,
+                                        myLocationButtonEnabled: true,
+                                        mapToolbarEnabled: false,
+                                        markers: {_reportLocation},
+                                        zoomControlsEnabled: false,
+                                        initialCameraPosition:
+                                            _initialCameraPosition,
+                                        onMapCreated:
+                                            (GoogleMapController controller) {
+                                          if (!_googleMapController
+                                              .isCompleted) {
+                                            _googleMapController
+                                                .complete(controller);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(Icons.map),
+                        Text("Show Police Station Location"),
+                      ],
+                    )),
+              ),
               const SizedBox(height: 10),
               const Divider(color: Colors.grey),
               const SizedBox(height: 10),

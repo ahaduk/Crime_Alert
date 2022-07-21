@@ -305,33 +305,50 @@ class _UserProfileCardState extends State<UserProfileCard> {
       children: [
         const Text("Continue to set profile picture",
             textAlign: TextAlign.center),
+        const SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    _file = null;
-                    _imageSelected = false;
-                  });
-                },
-                child: const Text("Cancel")),
-            TextButton(
-                onPressed: () async {
-                  setState(() {
-                    _settingProfile = true;
-                  });
-                  //set profile pic
-                  String res = await FireStoreMethods().setprofilePic(
-                      _file!, FirebaseAuth.instance.currentUser!.uid);
-                  Utils.showSnackbar(res, context);
-                  setState(() {
-                    _file = null;
-                    _imageSelected = false;
-                    _settingProfile = false;
-                  });
-                },
-                child: const Text("Continue"))
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _file = null;
+                  _imageSelected = false;
+                });
+              },
+              child: const Text('Cancel'),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(AppColors.mainColor),
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  foregroundColor: MaterialStateProperty.all(Colors.black)),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  _settingProfile = true;
+                });
+                //set profile pic
+                String res = await FireStoreMethods().setprofilePic(
+                    _file!, FirebaseAuth.instance.currentUser!.uid);
+                Utils.showSnackbar(res, context);
+                setState(() {
+                  _file = null;
+                  _imageSelected = false;
+                  _settingProfile = false;
+                });
+              },
+              child: const Text('Continue'),
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3),
+                          side: const BorderSide(color: Colors.grey))),
+                  backgroundColor:
+                      MaterialStateProperty.all(AppColors.mainColor),
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  foregroundColor: MaterialStateProperty.all(Colors.black)),
+            ),
           ],
         ),
       ],

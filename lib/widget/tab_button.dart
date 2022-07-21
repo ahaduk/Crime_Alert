@@ -32,7 +32,7 @@ class NavTabs extends StatelessWidget {
         ),
         child: BigText(
           text: text,
-          size: screenHeight <= 825 ? 14 : Dimensions.font20,
+          size: 14,
           fontWeight:
               selectedPage == pageNumber ? FontWeight.w700 : FontWeight.w300,
         ),

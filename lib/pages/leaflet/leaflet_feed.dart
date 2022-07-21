@@ -47,11 +47,11 @@ class _LeafletFeedState extends State<LeafletFeed> {
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.mainColor,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              height: 40,
-              width: 100,
+              height: 50,
+              width: Dimensions.screenWidth > 361.1618200094481 ? 100 : 80,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/screenlogo.png'),
@@ -73,7 +73,7 @@ class _LeafletFeedState extends State<LeafletFeed> {
                   size: Dimensions.font14,
                 ),
                 NavTabs(
-                  text: "Missing   ",
+                  text: "Missing",
                   pageNumber: 1,
                   selectedPage: _selectedPage,
                   onPressed: () {
@@ -82,7 +82,7 @@ class _LeafletFeedState extends State<LeafletFeed> {
                 ),
               ],
             ),
-            const Center(child: UserProfileAvatar())
+            const UserProfileAvatar()
           ],
         ),
       ),

@@ -131,6 +131,13 @@ class _LocationReportState extends State<LocationReport> {
                           Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColors.mainColor),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    foregroundColor: MaterialStateProperty.all(
+                                        Colors.black)),
                                 onPressed: () {
                                   Get.to(
                                       () => MoreDetailOnReport(posts: _posts));

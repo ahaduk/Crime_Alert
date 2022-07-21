@@ -58,22 +58,54 @@ class _UserProfileAvatarState extends State<UserProfileAvatar> {
                     return StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .doc(snapshot.data!.uid)
                             .snapshots(),
                         builder: (context,
                             AsyncSnapshot<DocumentSnapshot?> usersnap) {
                           var userDocument = usersnap.data;
                           if (usersnap.hasData && userDocument!["isAgent"]) {
                             _fuser = FlutterUser.fromSnap(userDocument);
-                            return CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage:
-                                    NetworkImage(_fuser!.photoUrl!));
+                            return _fuser != null && _fuser!.photoUrl != null
+                                ? CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage:
+                                        NetworkImage(_fuser!.photoUrl!))
+                                : const CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage:
+                                        AssetImage("assets/profile.png"),
+                                  );
                           }
-                          return Container();
+                          return GestureDetector(
+                            onTap: () {
+                              if (!usersnap.hasData) {
+                                Get.to(() => const LoginScreen());
+                              } else {
+                                Get.to(() => ProfileView(fuser: _fuser!));
+                              }
+                            },
+                            child: _fuser != null && _fuser!.photoUrl != null
+                                ? CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage:
+                                        NetworkImage(_fuser!.photoUrl!))
+                                : const CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage:
+                                        AssetImage("assets/profile.png"),
+                                  ),
+                          );
                         });
                   }
-                  return Container();
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => const LoginScreen());
+                    },
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage("assets/profile.png"),
+                    ),
+                  );
                 },
               )
             : const CircleAvatar(

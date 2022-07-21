@@ -140,6 +140,13 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(AppColors.mainColor),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.black)),
                       onPressed: () {
                         GeoPoint reportLocation = (widget.snap['reportLocation']
                             ['geopoint'] as GeoPoint);
