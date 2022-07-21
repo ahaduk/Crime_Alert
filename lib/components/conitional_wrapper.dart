@@ -27,14 +27,17 @@ class _WrapperState extends State<Wrapper> {
               builder: (context, AsyncSnapshot<DocumentSnapshot?> usersnap) {
                 var userDocument = usersnap.data;
                 if (usersnap.hasData && userDocument!["isAgent"]) {
-                  return FloatingActionButton(
-                    heroTag: null,
-                    onPressed: () {
-                      Get.to(() => const PostAlertPage());
-                    },
-                    backgroundColor: AppColors.mainColor,
-                    foregroundColor: Colors.black,
-                    child: const Icon(Icons.add, size: 30),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 30),
+                    child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: () {
+                        Get.to(() => const PostAlertPage());
+                      },
+                      backgroundColor: AppColors.mainColor,
+                      foregroundColor: Colors.black,
+                      child: const Icon(Icons.add, size: 30),
+                    ),
                   );
                 }
                 return Container();

@@ -27,10 +27,10 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
           widget.snap['upvotes'],
           widget.snap['downvotes']);
       if (res != null) {
-        showSnackbar(res, context);
+        Utils.showSnackbar(res, context);
       }
     } else {
-      showSnackbar('You can not vote on your own post', context);
+      Utils.showSnackbar('You can not vote on your own post', context);
     }
   }
 
@@ -43,10 +43,10 @@ class _UpvoteDownvoteState extends State<UpvoteDownvote> {
           widget.snap['upvotes'],
           widget.snap['downvotes']);
       if (res != null) {
-        showSnackbar(res, context);
+        Utils.showSnackbar(res, context);
       }
     } else {
-      showSnackbar('You can not vote on your own post', context);
+      Utils.showSnackbar('You can not vote on your own post', context);
     }
   }
 

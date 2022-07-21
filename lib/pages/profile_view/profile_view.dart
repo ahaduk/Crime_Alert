@@ -1,6 +1,7 @@
 import 'package:crime_alert/components/user_posts.dart';
 import 'package:crime_alert/components/user_profile_card.dart';
 import 'package:crime_alert/model/flutter_user.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/dimensions.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,13 @@ class _ProfileViewState extends State<ProfileView> {
     } catch (e) {
       try {
         _currentLocation = (await Geolocator.getLastKnownPosition())!;
-        showSnackbar("Using last known location to load feed", context);
+        Utils.showSnackbar("Using last known location to load feed", context);
         setState(() {
           _locationEnabled = true;
           _isLoading = false;
         });
       } catch (e) {
-        showSnackbar("Please enable location services.", context);
+        Utils.showSnackbar("Please enable location services.", context);
       }
     }
     setState(() {
@@ -55,7 +56,9 @@ class _ProfileViewState extends State<ProfileView> {
     if (_isLoading && !_locationEnabled) {
       return const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: AppColors.mainColor,
+          ),
         ),
       );
     } else {
@@ -66,6 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
                 Container(

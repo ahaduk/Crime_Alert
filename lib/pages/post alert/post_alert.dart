@@ -56,16 +56,16 @@ class _PostAlertPageState extends State<PostAlertPage> {
               onPressed: () async {
                 //Validate
                 if (!_locationSelected) {
-                  showSnackbar(
+                  Utils.showSnackbar(
                       "Please select a location for the alert", context);
                   return;
                 }
                 if (_descriptionController.text == "") {
-                  showSnackbar("Descripton can not be empty", context);
+                  Utils.showSnackbar("Descripton can not be empty", context);
                   return;
                 }
                 if (_distanceInMeters > 2000) {
-                  showSnackbar(
+                  Utils.showSnackbar(
                       "Report location can not be greater than 2KM from your current location.",
                       context);
                   return;
@@ -85,10 +85,10 @@ class _PostAlertPageState extends State<PostAlertPage> {
                   _isLoading = false;
                 });
                 if (res == "success") {
-                  showSnackbar("Successfully posted alert!", context);
+                  Utils.showSnackbar("Successfully posted alert!", context);
                   Get.back();
                 } else {
-                  showSnackbar("Failed to upload alert", context);
+                  Utils.showSnackbar("Failed to upload alert", context);
                 }
               },
               child: const Text(
@@ -142,10 +142,15 @@ class _PostAlertPageState extends State<PostAlertPage> {
                           },
                           child: Row(
                             children: [
-                              _imageSelected
-                                  ? const Text("Change Image")
-                                  : const Text("Choose Image"),
-                              const Icon(Icons.image),
+                              Text(
+                                  _imageSelected
+                                      ? "Change Image"
+                                      : "Choose Image",
+                                  style: const TextStyle(color: Colors.black)),
+                              const Icon(
+                                Icons.image,
+                                color: Colors.black38,
+                              ),
                             ],
                           )),
                       TextButton(
@@ -182,7 +187,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                               buildLocationSelector(
                                   context, _initialCameraPosition);
                             } catch (e) {
-                              showSnackbar(e.toString(), context);
+                              Utils.showSnackbar(e.toString(), context);
                               Get.back();
                             }
                           },
@@ -190,10 +195,16 @@ class _PostAlertPageState extends State<PostAlertPage> {
                             children: [
                               Row(
                                 children: [
-                                  _locationSelected
-                                      ? const Text("Change Location")
-                                      : const Text("Choose Location"),
-                                  const Icon(Icons.map)
+                                  Text(
+                                    _locationSelected
+                                        ? "Change Location"
+                                        : "Choose Location",
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  const Icon(
+                                    Icons.map,
+                                    color: Colors.black38,
+                                  )
                                 ],
                               ),
                               _locationSelected
@@ -203,7 +214,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                                       style: TextStyle(
                                           color: _distanceInMeters > 2000
                                               ? Colors.red
-                                              : Colors.blue),
+                                              : Colors.black),
                                     )
                                   : Container()
                             ],
@@ -270,7 +281,7 @@ class _PostAlertPageState extends State<PostAlertPage> {
                           setStateModal(
                               () {}); //Setstate for modal to refresh selected location
                           if (_distanceInMeters > 2000) {
-                            showSnackbar(
+                            Utils.showSnackbar(
                                 "Report location can not be greater than 2KM from your current location.",
                                 context);
                           }

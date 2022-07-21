@@ -24,11 +24,12 @@ class _KeepMeAlertState extends State<KeepMeAlert> {
       _toggled = widget.toggled;
     }
     return SwitchListTile(
+        activeColor: AppColors.mainColor,
         contentPadding: const EdgeInsets.all(0),
         secondary: const Icon(
           Icons.alarm,
           size: 26,
-          color: AppColors.iconColor1,
+          color: AppColors.mainColor,
         ),
         title: BigText(
           text: "Keep Me alert",
@@ -40,13 +41,13 @@ class _KeepMeAlertState extends State<KeepMeAlert> {
           if (await Geolocator.isLocationServiceEnabled() || value == false) {
             String res = await FireStoreMethods().toggleKeepMeAlert(
                 FirebaseAuth.instance.currentUser!.uid, value);
-            showSnackbar(res, context);
+            Utils.showSnackbar(res, context);
             setState(() {
               _toggled = value;
               stateSet = true;
             });
           } else {
-            showSnackbar(
+            Utils.showSnackbar(
                 'You need to enable your location to stay alert', context);
           }
         });

@@ -198,9 +198,9 @@ class FireStoreMethods {
       //   await FirebaseStorage.instance.refFromURL(postUrl).delete();
       // }
       await _firebaseFirestore.collection('posts').doc(postId).delete();
-      showSnackbar("Successfully deleted post", context);
+      Utils.showSnackbar("Successfully deleted post", context);
     } catch (err) {
-      showSnackbar("Failed to delete post", context);
+      Utils.showSnackbar("Failed to delete post", context);
     }
   }
 

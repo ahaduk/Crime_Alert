@@ -3,9 +3,11 @@ import 'package:crime_alert/pages/home/home_feed.dart';
 import 'package:crime_alert/pages/leaflet/leaflet_feed.dart';
 import 'package:crime_alert/pages/setting/settings.dart';
 import 'package:crime_alert/utility/colors.dart';
+import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'firebase_options.dart';
 import 'pages/stats/statistics_page.dart';
@@ -18,6 +20,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Utils();
   //Splash screen
   // FlutterNativeSplash.removeAfter(initilization);
   runApp(const MyApp());
@@ -59,6 +62,7 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      scaffoldMessengerKey: Utils.messengerKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           fontFamily: 'Montserrat',
@@ -77,23 +81,30 @@ class MyAppState extends State<MyApp> {
         ),
         floatingActionButton: const Wrapper(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          currentIndex: _selectedIndex,
-          onTap: _navigatBottomBar,
+        bottomNavigationBar: GNav(
           backgroundColor: Colors.black,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: AppColors.iconColor2,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.notifications), label: 'Leaflet'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: 'Statistics',
+          color: const Color(0xF1F1F1F1),
+          activeColor: AppColors.mainColor,
+          padding: const EdgeInsets.all(17),
+          gap: 0,
+          onTabChange: _navigatBottomBar,
+          tabs: const [
+            GButton(
+              icon: Icons.home,
+              text: 'Home',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'More'),
+            GButton(
+              icon: Icons.notifications,
+              text: 'Leaflet',
+            ),
+            GButton(
+              icon: Icons.bar_chart,
+              text: 'Statistics',
+            ),
+            GButton(
+              icon: Icons.settings,
+              text: 'More',
+            ),
           ],
         ),
       ),

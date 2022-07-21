@@ -6,6 +6,7 @@ import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/model/post_model.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:crime_alert/widget/big_text.dart';
@@ -57,9 +58,9 @@ class _PostCardFromListState extends State<PostCardFromList> {
     } catch (e) {
       try {
         _currentLocation = (await Geolocator.getLastKnownPosition())!;
-        showSnackbar("Using last known location to load feed", context);
+        Utils.showSnackbar("Using last known location to load feed", context);
       } catch (e) {
-        showSnackbar("Please enable location services.", context);
+        Utils.showSnackbar("Please enable location services.", context);
       }
     }
   }
@@ -115,6 +116,7 @@ class _PostCardFromListState extends State<PostCardFromList> {
                         if (loadingProgress == null) return child;
                         return Center(
                           child: CircularProgressIndicator(
+                            color: AppColors.mainColor,
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
                                     loadingProgress.expectedTotalBytes!

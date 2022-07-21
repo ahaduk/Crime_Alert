@@ -52,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   )),
             ),
-            const CircularProgressIndicator(),
+            const CircularProgressIndicator(
+              color: AppColors.mainColor,
+            ),
           ],
         ),
       );
@@ -157,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isSending = false;
         });
-        showSnackbar(error.message.toString(), context);
+        Utils.showSnackbar(error.message.toString(), context);
       },
     );
   }

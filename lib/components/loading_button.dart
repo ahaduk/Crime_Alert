@@ -10,7 +10,7 @@ class LoadingButton extends StatelessWidget {
     return Container(
       child: const Center(
         child: CircularProgressIndicator(
-          color: Colors.white,
+          color: AppColors.mainColor,
         ),
       ),
       width: double.infinity,

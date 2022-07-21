@@ -76,7 +76,7 @@ class _OtpFormState extends State<OtpForm> {
                 String? res = await AuthMethods().verifyUser(
                     verificationId: widget.verificationId,
                     otpCode: _otpCodeController.text);
-                showSnackbar(res.toString(), context);
+                Utils.showSnackbar(res.toString(), context);
                 setState(() {
                   isLoading = false;
                 });

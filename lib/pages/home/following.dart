@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/postcard.dart';
 import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/resources/auth_methods.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,12 @@ class _FollowingState extends State<Following> {
     } catch (e) {
       try {
         _currentLocation = (await Geolocator.getLastKnownPosition())!;
-        showSnackbar("Using last known location to load feed", context);
+        Utils.showSnackbar("Using last known location to load feed", context);
         setState(() {
           _locationEnabled = true;
         });
       } catch (e) {
-        showSnackbar("Please enable location services.", context);
+        Utils.showSnackbar("Please enable location services.", context);
       }
     }
   }
@@ -73,7 +74,9 @@ class _FollowingState extends State<Following> {
                 : Flexible(
                     child: _isLoading
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: AppColors.mainColor,
+                            ),
                           )
                         : _fuser!.following == null ||
                                 _fuser!.following!.isEmpty
@@ -95,7 +98,9 @@ class _FollowingState extends State<Following> {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return const Center(
-                                      child: CircularProgressIndicator(),
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.mainColor,
+                                      ),
                                     );
                                   }
                                   if (snapshot.data != null &&

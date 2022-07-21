@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/leafletcard.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
@@ -21,9 +22,9 @@ class _MissingState extends State<Missing> {
     } catch (e) {
       try {
         _currentLocation = (await Geolocator.getLastKnownPosition())!;
-        showSnackbar("Using last known location to load feed", context);
+        Utils.showSnackbar("Using last known location to load feed", context);
       } catch (e) {
-        showSnackbar("Please enable location services.", context);
+        Utils.showSnackbar("Please enable location services.", context);
       }
     }
   }
@@ -53,7 +54,9 @@ class _MissingState extends State<Missing> {
                         snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: AppColors.mainColor,
+                      ),
                     );
                   }
                   if (snapshot.data!.docs.isEmpty) {

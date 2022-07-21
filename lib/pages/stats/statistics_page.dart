@@ -181,7 +181,7 @@ class _StatsState extends State<Stats> {
                       zoom: 19,
                     )));
                   } catch (e) {
-                    showSnackbar(e.toString(), context);
+                    Utils.showSnackbar(e.toString(), context);
                   }
                 })
             : null,

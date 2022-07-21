@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/detail_on_report.dart';
 import 'package:crime_alert/model/post_model.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get/get.dart';
@@ -92,7 +93,9 @@ class _LocationReportState extends State<LocationReport> {
                 Text("Generating Report",
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: 20),
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                  color: AppColors.mainColor,
+                )
               ],
             ),
           )

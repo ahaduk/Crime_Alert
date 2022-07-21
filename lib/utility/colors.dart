@@ -15,6 +15,9 @@ class AppColors {
   static const Color mainColor = Color(0xF6F6BE00);
   static const Color background = Color.fromARGB(255, 227, 229, 231);
 
+  static const Color nocolor = Colors.black;
+  static const Color yescolor = Colors.black38;
+
   static const Color iconColor1 = Color.fromARGB(255, 255, 153, 0);
   static const Color iconColor2 = Color.fromARGB(255, 252, 187, 90);
   static const Color iconColor3 = Color.fromARGB(255, 253, 203, 127);
@@ -22,5 +25,5 @@ class AppColors {
   static const Color paraColor = Color(0xFF8f837f);
   static const Color buttonBackgroundColor = Color(0xFFf7f6f4);
   static const Color signColor = Color(0xFFa9a29f);
-  static const Color titleColor = Color(0xFF5c524f);
+  static const Color titlecolor = Color.fromARGB(109, 53, 53, 53);
 }

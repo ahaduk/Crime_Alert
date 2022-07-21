@@ -3,6 +3,24 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:math' show asin, cos, sqrt;
 
+class Utils {
+  static final messengerKey = GlobalKey<ScaffoldMessengerState>();
+  static showSnackbar(String? content, BuildContext context) {
+    if (content == null) return;
+    final snackBar = SnackBar(
+      content: Text(
+        content,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: const Color.fromARGB(212, 0, 0, 0),
+    );
+
+    messengerKey.currentState!
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+}
+
 pickImage(ImageSource source) async {
   final ImagePicker _imagePicker = ImagePicker();
   XFile? _file = await _imagePicker.pickImage(source: source);
@@ -11,10 +29,6 @@ pickImage(ImageSource source) async {
   } else {
     return null;
   }
-}
-
-showSnackbar(String content, BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 }
 
 Future<Position> determinePosition() async {

@@ -118,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: const Icon(
                         Icons.supervised_user_circle_outlined,
                         size: 26,
-                        color: AppColors.iconColor1,
+                        color: AppColors.mainColor,
                       ),
                       trailing: const Icon(
                         Icons.arrow_forward_ios,
@@ -140,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: const Icon(
                         Icons.warning_rounded,
                         size: 26,
-                        color: AppColors.iconColor1,
+                        color: AppColors.mainColor,
                       ),
                       trailing: const Icon(
                         Icons.arrow_forward_ios,
@@ -162,12 +162,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: const Icon(
                         Icons.info,
                         size: 26,
-                        color: AppColors.iconColor1,
+                        color: AppColors.mainColor,
                       ),
                       trailing: const Icon(
                         Icons.arrow_forward_ios,
                         size: 18,
-                        color: AppColors.iconColor2,
+                        color: AppColors.mainColor,
                       ),
                       title: BigText(
                         text: "About Crime Alert",
@@ -191,7 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             leading: const Icon(
                               Icons.logout,
                               size: 26,
-                              color: AppColors.iconColor1,
+                              color: AppColors.mainColor,
                             ),
                             title: BigText(
                               text: "Logout",
@@ -199,12 +199,64 @@ class _SettingsPageState extends State<SettingsPage> {
                               color: AppColors.textColor,
                             ),
                             onTap: () async {
-                              await AuthMethods().signOut();
-                              showSnackbar("Signed out successfully".toString(),
-                                  context);
-                              setState(() {
-                                _fuser = null;
-                              });
+                              showDialog(
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor:
+                                        Theme.of(context).bottomAppBarColor,
+                                    title: Center(
+                                      child: Text(
+                                        "Logout",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Dimensions.height20,
+                                            color: AppColors.mainColor),
+                                      ),
+                                    ),
+                                    content: const Text(
+                                      "Do you want to Logout?",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          color: AppColors.titlecolor),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "No",
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: AppColors.nocolor),
+                                        ),
+                                      ),
+                                      TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+
+                                            await AuthMethods().signOut();
+                                            Utils.showSnackbar(
+                                                "Signed out successfully"
+                                                    .toString(),
+                                                context);
+                                            setState(() {
+                                              _fuser = null;
+                                            });
+                                          },
+                                          child: const Text("Yes",
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: AppColors.yescolor)))
+                                    ],
+                                    elevation: 5.0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  );
+                                },
+                                context: context,
+                              );
                             },
                           )
                         : Container(),

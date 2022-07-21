@@ -6,6 +6,7 @@ import 'package:crime_alert/model/flutter_user.dart';
 import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/pages/post%20description/post_description_screen.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +129,7 @@ class _PostCardState extends State<PostCard> {
                           if (loadingProgress == null) return child;
                           return Center(
                             child: CircularProgressIndicator(
+                              color: AppColors.mainColor,
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
                                       loadingProgress.expectedTotalBytes!

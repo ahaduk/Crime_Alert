@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crime_alert/components/police_inkwell.dart';
 import 'package:crime_alert/model/police_station.dart';
 import 'package:crime_alert/resources/firestore_methods.dart';
+import 'package:crime_alert/utility/colors.dart';
 import 'package:crime_alert/utility/constants.dart';
 import 'package:crime_alert/utility/utils.dart';
 import 'package:flutter/material.dart';
@@ -116,6 +117,7 @@ class LeafletCardState extends State<LeafletCard> {
                           if (loadingProgress == null) return child;
                           return Center(
                             child: CircularProgressIndicator(
+                              color: AppColors.mainColor,
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
                                       loadingProgress.expectedTotalBytes!

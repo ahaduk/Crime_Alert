@@ -39,7 +39,9 @@ class _UserProfileCardState extends State<UserProfileCard> {
       builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: AppColors.mainColor,
+            ),
           );
         }
         if (!snapshot.data!.exists) {
@@ -58,7 +60,10 @@ class _UserProfileCardState extends State<UserProfileCard> {
                 ? showImageConfirmationPopup(context)
                 : Container(),
             _settingProfile
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: AppColors.mainColor,
+                  ))
                 : Container(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +78,7 @@ class _UserProfileCardState extends State<UserProfileCard> {
                 GestureDetector(
                   onTap: () {
                     if (!_fuser.isAgent) {
-                      showSnackbar(
+                      Utils.showSnackbar(
                           "Civilians don't need a profile picture", context);
                     } else if (FirebaseAuth.instance.currentUser != null &&
                         FirebaseAuth.instance.currentUser!.uid == _fuser.uid) {
@@ -319,7 +324,7 @@ class _UserProfileCardState extends State<UserProfileCard> {
                   //set profile pic
                   String res = await FireStoreMethods().setprofilePic(
                       _file!, FirebaseAuth.instance.currentUser!.uid);
-                  showSnackbar(res, context);
+                  Utils.showSnackbar(res, context);
                   setState(() {
                     _file = null;
                     _imageSelected = false;
