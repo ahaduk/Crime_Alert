@@ -210,7 +210,10 @@ class _PostDescriptionScreenState extends State<PostDescriptionScreen> {
                           Text(widget.distance.toStringAsFixed(2) + " KM away"),
                         ],
                       )),
-                  UpvoteDownvote(postId: widget.id, snap: widget.snap),
+                  //Only show upvote if post not from police station
+                  widget.policeStation == null
+                      ? UpvoteDownvote(postId: widget.id, snap: widget.snap)
+                      : Container(),
                 ],
               ),
             ),
